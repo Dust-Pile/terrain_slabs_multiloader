@@ -22,8 +22,17 @@ public class PodzolSlab extends CustomSlab {
         SNOWY = BlockStateProperties.SNOWY;
     }
 
-    public PodzolSlab(BlockBehaviour.Properties properties) {
-        super(properties);
+    public PodzolSlab(Block block) {
+        super(block);
+        this.registerDefaultState(this.defaultBlockState()
+                .setValue(TYPE, SlabType.BOTTOM)
+                .setValue(SNOWY, false)
+                .setValue(WATERLOGGED, false)
+                .setValue(GENERATED, false));
+    }
+
+    public PodzolSlab(Block block, BlockBehaviour.Properties properties) {
+        super(block, properties);
         this.registerDefaultState(this.defaultBlockState()
                 .setValue(TYPE, SlabType.BOTTOM)
                 .setValue(SNOWY, false)

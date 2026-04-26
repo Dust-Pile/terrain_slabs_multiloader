@@ -31,10 +31,19 @@ public class MyceliumSlab extends CustomSlab {
     static {
         SNOWY = BlockStateProperties.SNOWY;
     }
-    public MyceliumSlab(BlockBehaviour.Properties properties) {
-        super(properties);
+    public MyceliumSlab(Block block) {
+        super(block);
         this.registerDefaultState(this.defaultBlockState()
                 .setValue(TYPE, net.minecraft.world.level.block.state.properties.SlabType.BOTTOM)
+                .setValue(SNOWY, false)
+                .setValue(WATERLOGGED, false)
+                .setValue(GENERATED, false));
+    }
+
+    public MyceliumSlab(Block block, BlockBehaviour.Properties properties) {
+        super(block, properties);
+        this.registerDefaultState(this.defaultBlockState()
+                .setValue(TYPE, SlabType.BOTTOM)
                 .setValue(SNOWY, false)
                 .setValue(WATERLOGGED, false)
                 .setValue(GENERATED, false));

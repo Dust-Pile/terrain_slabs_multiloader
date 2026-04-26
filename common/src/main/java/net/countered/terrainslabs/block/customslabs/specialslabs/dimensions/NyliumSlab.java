@@ -19,8 +19,16 @@ import net.minecraft.world.level.lighting.LightEngine;
 
 public class NyliumSlab extends CustomSlab implements BonemealableBlock {
 
-    public NyliumSlab(BlockBehaviour.Properties properties) {
-        super(properties);
+    public NyliumSlab(Block block, BlockBehaviour.Properties properties) {
+        super(block, properties);
+        this.registerDefaultState(this.defaultBlockState()
+                .setValue(TYPE, SlabType.BOTTOM)
+                .setValue(WATERLOGGED, false)
+                .setValue(GENERATED, false));
+    }
+
+    public NyliumSlab(Block block) {
+        super(block);
         this.registerDefaultState(this.defaultBlockState()
                 .setValue(TYPE, SlabType.BOTTOM)
                 .setValue(WATERLOGGED, false)

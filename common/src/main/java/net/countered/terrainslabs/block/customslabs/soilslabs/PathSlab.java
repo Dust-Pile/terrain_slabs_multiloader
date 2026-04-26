@@ -18,8 +18,16 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class PathSlab extends CustomSlab {
 
-    public PathSlab(BlockBehaviour.Properties properties) {
-        super(properties);
+    public PathSlab(Block block) {
+        super(block);
+        this.registerDefaultState(this.defaultBlockState()
+                .setValue(TYPE, SlabType.BOTTOM)
+                .setValue(WATERLOGGED, false)
+                .setValue(GENERATED, false));
+    }
+
+    public PathSlab(Block block, BlockBehaviour.Properties properties) {
+        super(block, properties);
         this.registerDefaultState(this.defaultBlockState()
                 .setValue(TYPE, SlabType.BOTTOM)
                 .setValue(WATERLOGGED, false)
