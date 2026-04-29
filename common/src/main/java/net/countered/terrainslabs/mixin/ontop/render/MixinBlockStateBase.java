@@ -17,6 +17,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -29,23 +30,11 @@ public abstract class MixinBlockStateBase {
      */
     @Inject(method = "getOffset", at = @At("RETURN"), cancellable = true)
     private void terrain_slabs$getOffset(BlockGetter level, BlockPos pos, CallbackInfoReturnable<Vec3> cir) {
-        BlockState state = (BlockState) (Object) this;
+        if ( !updateOnTopState( level, pos ) ) return;
 
-        if (!MixinHelper.terrain_slabs$isStateValidOnTop(state)) return;
+        Vec3 currentOffset = cir.getReturnValue();
+        cir.setReturnValue(new Vec3(currentOffset.x, -0.5, currentOffset.z));
 
-        BlockPos belowPos = pos.below();
-        if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER) {
-            belowPos = pos.below(2);
-        }
-
-        BlockState belowState = level.getBlockState(belowPos);
-
-        if (belowState.is(BlockTags.SLABS)) {
-            if (belowState.hasProperty(SlabBlock.TYPE) && belowState.getValue(SlabBlock.TYPE) == SlabType.BOTTOM) {
-                Vec3 currentOffset = cir.getReturnValue();
-                cir.setReturnValue(new Vec3(currentOffset.x, -0.5, currentOffset.z));
-            }
-        }
     }
 
     /**
@@ -57,25 +46,14 @@ public abstract class MixinBlockStateBase {
     private void terrain_slabs$smartShapeOffset(BlockGetter level, BlockPos pos, CollisionContext context, CallbackInfoReturnable<VoxelShape> cir) {
         BlockState state = (BlockState) (Object) this;
 
-        if (!MixinHelper.terrain_slabs$isStateValidOnTop(state)) return;
+        if ( !updateOnTopState( level, pos ) ) return;
 
-        BlockPos belowPos = pos.below();
-        if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER) {
-            belowPos = pos.below(2);
-        }
-
-        BlockState belowState = level.getBlockState(belowPos);
-
-        if (belowState.is(BlockTags.SLABS)) {
-            if (belowState.hasProperty(SlabBlock.TYPE) && belowState.getValue(SlabBlock.TYPE) == SlabType.BOTTOM) {
-                Vec3 offset = state.getOffset(level, pos);
-                // fix for flowers moving their shape themselves
-                if (offset.y < 0) {
-                    VoxelShape currentShape = cir.getReturnValue();
-                    if (currentShape.min(Direction.Axis.Y) >= 0) {
-                        cir.setReturnValue(currentShape.move(offset.x, offset.y, offset.z));
-                    }
-                }
+        Vec3 offset = state.getOffset(level, pos);
+        // fix for flowers moving their shape themselves
+        if (offset.y < 0) {
+            VoxelShape currentShape = cir.getReturnValue();
+            if (currentShape.min(Direction.Axis.Y) >= 0) {
+                cir.setReturnValue(currentShape.move(offset.x, offset.y, offset.z));
             }
         }
     }
@@ -91,5 +69,30 @@ public abstract class MixinBlockStateBase {
                 cir.setReturnValue(Shapes.empty());
             }
         }
+    }
+
+    /**
+     * Funcitonalize on top checks
+     */
+    @Unique
+    private boolean updateOnTopState(BlockGetter level, BlockPos pos ) {
+        BlockState state = (BlockState) (Object) this;
+
+        if ( !MixinHelper.terrain_slabs$isStateValidOnTop(state) ) {
+            return false;
+        }
+
+        BlockPos belowPos = pos.below();
+        if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER) {
+            belowPos = pos.below(2);
+        }
+
+        BlockState belowState = level.getBlockState(belowPos);
+
+        if (belowState.is(BlockTags.SLABS)) {
+            return belowState.hasProperty(SlabBlock.TYPE) && belowState.getValue(SlabBlock.TYPE) == SlabType.BOTTOM;
+        }
+
+        return false;
     }
 }
