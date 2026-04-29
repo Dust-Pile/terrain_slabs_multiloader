@@ -1,5 +1,7 @@
 package net.countered.terrainslabs.block.customslabs.soilslabs;
 
+import net.countered.terrainslabs.block.interfaces.IDuelSlab;
+import net.countered.terrainslabs.block.interfaces.ISlabCopy;
 import net.countered.terrainslabs.registries.ModBlocksRegistry;
 import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
 import net.minecraft.core.BlockPos;
@@ -16,7 +18,7 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class PathSlab extends CustomSlab {
+final public class PathSlab extends CustomSlab implements IDuelSlab {
 
     public PathSlab(Block block) {
         super(block);
@@ -32,6 +34,11 @@ public class PathSlab extends CustomSlab {
                 .setValue(TYPE, SlabType.BOTTOM)
                 .setValue(WATERLOGGED, false)
                 .setValue(GENERATED, false));
+    }
+
+    @Override
+    public ISlabCopy getDuel() {
+        return (ISlabCopy) ModBlocksRegistry.DIRT_SLAB.get();
     }
 
     @Override

@@ -1,6 +1,8 @@
 package net.countered.terrainslabs.block.customslabs.soilslabs;
 
 import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
+import net.countered.terrainslabs.block.interfaces.IDuelSlab;
+import net.countered.terrainslabs.block.interfaces.ISlabCopy;
 import net.countered.terrainslabs.registries.ModBlocksRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,7 +29,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 
 
-public class GrassSlab extends CustomSlab {
+final public class GrassSlab extends CustomSlab implements IDuelSlab {
     public static final BooleanProperty SNOWY;
     static {
         SNOWY = BlockStateProperties.SNOWY;
@@ -49,6 +51,11 @@ public class GrassSlab extends CustomSlab {
                 .setValue(SNOWY, false)
                 .setValue(WATERLOGGED, false)
                 .setValue(GENERATED, false));
+    }
+
+    @Override
+    public ISlabCopy getDuel() {
+        return (ISlabCopy) ModBlocksRegistry.DIRT_SLAB.get();
     }
 
     @Override
