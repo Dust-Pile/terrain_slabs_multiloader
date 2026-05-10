@@ -139,7 +139,7 @@ public class SlabFeature extends Feature<NoneFeatureConfiguration> {
 
     private BlockState updateBottomWaterloggedState(BlockState currentBlockState, BlockState blockAboveState, BlockState slabState) {
         if (slabState.hasProperty(BlockStateProperties.WATERLOGGED)) {
-            if (currentBlockState.is(Blocks.WATER) || blockAboveState.is(Blocks.WATER) || currentBlockState.getBlock() instanceof LiquidBlockContainer)
+            if (currentBlockState.is(Blocks.WATER) || blockAboveState.is(Blocks.WATER) || !currentBlockState.getFluidState().isEmpty())
             {
                 return slabState.setValue(BlockStateProperties.WATERLOGGED, true);
             }
