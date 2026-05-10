@@ -4,15 +4,19 @@
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
   "client": [
+    "ontop.render.MixinBlockModelShaper",
+    "ontop.render.MixinClientLevel"
   ],
   "mixins": [
     "feature.MixinDiskFeature",
     "feature.MixinOreFeature",
     "feature.WorldGenRegionMixin",
-    "ontop.place.MixinBlockBehaviours",
-    "ontop.place.MixinSnowLayer",
-    "ontop.place.MixinBlockState",
     "ontop.MixinBlockStateBase",
+    "ontop.place.MixinBlockBehaviours",
+    "ontop.place.MixinBlockState",
+    "ontop.place.MixinSnowLayer",
+    "ontop.render.MixinLevel",
+    "ontop.render.MixinServerPlayerGameMode",
     "ontop.render.target.MixinRaytrace",
     "shovel.MixinShovelItem",
     "shovel.ShovelItemAccessor"

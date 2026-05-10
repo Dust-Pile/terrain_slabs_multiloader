@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
 import net.minecraft.client.renderer.block.BlockModelShaper;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -16,11 +17,7 @@ public abstract class MixinBlockModelShaper {
     private Object terrain_slabs$replaceCopiedState(
             Map instance, Object o, Operation<Object> original
     ) {
-        if ( !((IOffsetState) o).terrain_slabs$getOffset() ) {
-            return original.call( instance, o );
-        }
-
-        return original.call( instance, ((IOffsetState) o).terrain_slabs$getOppositeState() );
+        return original.call( instance, IOffsetState.getStandardState( (BlockState) o ) );
     }
 
 }
