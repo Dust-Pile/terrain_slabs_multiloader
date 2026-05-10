@@ -1,5 +1,12 @@
 # Changelog
 
-## v3.0.3
-- 1.21.1 port
+## [3.0.4]
+
+### Fixed
+- fix random waterlogged slabs
+- fix game freeze when playing with other world generation mods
+
+## [3.0.3]
+
+### Fixed
 - fix trees generating on slabs
