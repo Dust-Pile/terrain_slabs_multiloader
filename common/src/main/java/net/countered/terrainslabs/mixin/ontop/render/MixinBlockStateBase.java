@@ -1,10 +1,9 @@
 package net.countered.terrainslabs.mixin.ontop.render;
 
 import net.countered.terrainslabs.util.MixinHelper;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.chunk.RenderChunkRegion;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.DoublePlantBlock;
@@ -31,7 +30,7 @@ public abstract class MixinBlockStateBase {
      */
     @Inject(method = "getOffset", at = @At("RETURN"), cancellable = true)
     private void terrain_slabs$getOffset(BlockGetter level, BlockPos pos, CallbackInfoReturnable<Vec3> cir) {
-        if (!(level instanceof RenderChunkRegion) && !(level instanceof ClientLevel)) {
+        if (level instanceof ServerLevel) {
             return;
         }
         BlockState state = (BlockState) (Object) this;
@@ -60,7 +59,7 @@ public abstract class MixinBlockStateBase {
             at = @At("RETURN"),
             cancellable = true)
     private void terrain_slabs$smartShapeOffset(BlockGetter level, BlockPos pos, CollisionContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if (!(level instanceof RenderChunkRegion) && !(level instanceof ClientLevel)) {
+        if (level instanceof ServerLevel) {
             return;
         }
         BlockState state = (BlockState) (Object) this;

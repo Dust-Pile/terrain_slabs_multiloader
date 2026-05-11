@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.5]
+### Fixed
+- fix blocks on slabs not rendering correctly + related crashes
+
+### Fixed
+
 ## [3.0.4]
 
 ### Fixed
