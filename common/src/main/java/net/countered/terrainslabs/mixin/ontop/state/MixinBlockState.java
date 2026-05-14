@@ -1,4 +1,4 @@
-package net.countered.terrainslabs.mixin.ontop.place;
+package net.countered.terrainslabs.mixin.ontop.state;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
@@ -18,21 +18,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin( BlockState.class )
 public abstract class MixinBlockState implements IOffsetState, Cloneable {
     @Unique
-    private boolean terrain_slabs$isOffset = false;
+    protected boolean terrain_slabs$isOffset = false;
     @Unique
-    private BlockState terrain_slabs$oppositeState = null;
-
-    @SuppressWarnings("SameParameterValue")
-    @Unique
-    private MixinBlockState setTerrain_slabs$isOffset( boolean bool ) {
-        terrain_slabs$isOffset = bool;
-        return this;
-    }
-    @Unique
-    private MixinBlockState setTerrain_slabs$oppositeState(BlockState state ) {
-        terrain_slabs$oppositeState = state;
-        return this;
-    }
+    protected BlockState terrain_slabs$oppositeState = null;
 
     @Override
     public boolean terrain_slabs$getOffset() {
@@ -47,8 +35,20 @@ public abstract class MixinBlockState implements IOffsetState, Cloneable {
         return terrain_slabs$oppositeState;
     }
 
+    @SuppressWarnings("SameParameterValue")
+    @Unique
+    private MixinBlockState setTerrain_slabs$isOffset( boolean bool ) {
+        terrain_slabs$isOffset = bool;
+        return this;
+    }
+    @Unique
+    private MixinBlockState setTerrain_slabs$oppositeState(BlockState state ) {
+        terrain_slabs$oppositeState = state;
+        return this;
+    }
+
     @SuppressWarnings("DataFlowIssue")
-    @Inject( method = "<init>", at = @At("TAIL"))
+    @Inject( method = "<init>", at = @At("RETURN"))
     private void terrain_slabs$offsetAppender(
             Block block, @SuppressWarnings("rawtypes") ImmutableMap immutableMap,
             @SuppressWarnings("rawtypes") MapCodec mapCodec, CallbackInfo ci
@@ -58,7 +58,9 @@ public abstract class MixinBlockState implements IOffsetState, Cloneable {
             return;
         }
 
-        terrain_slabs$oppositeState = (BlockState) (Object) this.clone().setTerrain_slabs$isOffset( true ).setTerrain_slabs$oppositeState( newState );
+        terrain_slabs$oppositeState = (BlockState) (Object) this.clone()
+                .setTerrain_slabs$isOffset( true )
+                .setTerrain_slabs$oppositeState( newState );
     }
 
     @Override
