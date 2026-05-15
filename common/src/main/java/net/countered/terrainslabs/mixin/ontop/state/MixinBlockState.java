@@ -3,7 +3,6 @@ package net.countered.terrainslabs.mixin.ontop.state;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
-import net.countered.terrainslabs.util.MixinHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,30 +36,14 @@ public abstract class MixinBlockState implements IOffsetState, Cloneable {
 
     @SuppressWarnings("SameParameterValue")
     @Unique
-    private MixinBlockState setTerrain_slabs$isOffset( boolean bool ) {
+    protected MixinBlockState terrain_slabs$setOffset( boolean bool ) {
         terrain_slabs$isOffset = bool;
         return this;
     }
     @Unique
-    private MixinBlockState setTerrain_slabs$oppositeState(BlockState state ) {
+    protected MixinBlockState terrain_slabs$setOppositeState( BlockState state ) {
         terrain_slabs$oppositeState = state;
         return this;
-    }
-
-    @SuppressWarnings("DataFlowIssue")
-    @Inject( method = "<init>", at = @At("RETURN"))
-    private void terrain_slabs$offsetAppender(
-            Block block, @SuppressWarnings("rawtypes") ImmutableMap immutableMap,
-            @SuppressWarnings("rawtypes") MapCodec mapCodec, CallbackInfo ci
-    ) {
-        BlockState newState = (BlockState) (Object) this;
-        if ( !MixinHelper.terrain_slabs$isStateValidOnTop( newState ) ) {
-            return;
-        }
-
-        terrain_slabs$oppositeState = (BlockState) (Object) this.clone()
-                .setTerrain_slabs$isOffset( true )
-                .setTerrain_slabs$oppositeState( newState );
     }
 
     @Override
@@ -70,5 +53,26 @@ public abstract class MixinBlockState implements IOffsetState, Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    // TODO: Restrict which blocks get states (tag will not work for this...)
+    @SuppressWarnings("DataFlowIssue")
+    @Inject( method = "<init>", at = @At("RETURN"))
+    private void terrain_slabs$offsetAppender(
+            Block block, @SuppressWarnings("rawtypes") ImmutableMap immutableMap,
+            @SuppressWarnings("rawtypes") MapCodec mapCodec, CallbackInfo ci
+    ) {
+        MixinBlockState newState = this;
+//        if ( !MixinHelper.terrain_slabs$isStateValidOnTop( newState ) ) {
+//            return;
+//        }
+
+        newState.terrain_slabs$setOppositeState( (BlockState) (Object) newState.clone()
+                .terrain_slabs$setOffset( true )
+                .terrain_slabs$setOppositeState( (BlockState) (Object) newState )
+        );
+
+        // No... not that easy...
+        // Block.BLOCK_STATE_REGISTRY.add( newState.terrain_slabs$getOppositeState() );
     }
 }

@@ -1,5 +1,6 @@
 package net.countered.terrainslabs.mixin.ontop.state;
 
+import net.countered.platform.PlatformConfigHooks;
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
 import net.countered.terrainslabs.util.MixinHelper;
 import net.minecraft.core.BlockPos;
@@ -21,6 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+// TODO: Disable ontop mixins when ontop plants disabled
 @Mixin(BlockBehaviour.BlockStateBase.class)
 public abstract class MixinBlockStateBase implements IOffsetState {
 
@@ -31,15 +33,18 @@ public abstract class MixinBlockStateBase implements IOffsetState {
 
 
     /**
-     *
+     * Offset state on update as a final step
      */
     @Inject( method = "updateShape", at = @At("TAIL") )
-    private void terrain_slabs$updateOffsetOnUpdate(
+    private void terrain_slabs$updateOffset(
             Direction direction, BlockState neighborState, LevelAccessor level,
             BlockPos pos, BlockPos neighborPos,
             CallbackInfoReturnable<BlockState> cir
     ) {
-        //noinspection ConstantValue
+        if ( !PlatformConfigHooks.isVegetationOnSlabsEnabled() ) {
+            return;
+        }
+
         if ( direction != Direction.DOWN || direction != Direction.UP ) {
             return;
         }
@@ -59,6 +64,10 @@ public abstract class MixinBlockStateBase implements IOffsetState {
     private void terrain_slabs$updateOffsetOnPlace(
             Level level, BlockPos pos, BlockState oldState, boolean movedByPiston, CallbackInfo ci
     ) {
+        if ( !PlatformConfigHooks.isVegetationOnSlabsEnabled() ) {
+            return;
+        }
+
         IOffsetState newState = (IOffsetState) level.getBlockState( pos );
         if ( !newState.terrain_slabs$hasOffsetState() ) {
             return;
@@ -80,8 +89,7 @@ public abstract class MixinBlockStateBase implements IOffsetState {
      */
     @Inject(method = "getOffset", at = @At("RETURN"), cancellable = true)
     private void terrain_slabs$getOffset(BlockGetter level, BlockPos pos, CallbackInfoReturnable<Vec3> cir) {
-        IOffsetState thisState = (IOffsetState) this;
-        if ( !thisState.terrain_slabs$getOffset() ) return;
+        if ( !this.terrain_slabs$getOffset() ) return;
 
         Vec3 currentOffset = cir.getReturnValue();
         cir.setReturnValue(new Vec3(currentOffset.x, -0.5, currentOffset.z));
@@ -95,10 +103,9 @@ public abstract class MixinBlockStateBase implements IOffsetState {
             at = @At("RETURN"),
             cancellable = true)
     private void terrain_slabs$smartShapeOffset(BlockGetter level, BlockPos pos, CollisionContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        IOffsetState thisState = (IOffsetState) this;
-        if ( !thisState.terrain_slabs$getOffset() ) return;
+        if ( !this.terrain_slabs$getOffset() ) return;
 
-        Vec3 offset = thisState.asState().getOffset(level, pos);
+        Vec3 offset = this.asState().getOffset(level, pos);
         // TODO: Make this more robust for XYZ offset type
         // fix for flowers moving their shape themselves
         if (offset.y < 0) {

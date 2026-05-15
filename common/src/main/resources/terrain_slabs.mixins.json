@@ -5,7 +5,7 @@
   "minVersion": "0.8",
   "client": [
     "ontop.render.MixinBlockModelShaper",
-    "ontop.render.MixinClientLevel"
+    "ontop.render.MixinLevelRenderer"
   ],
   "mixins": [
     "feature.MixinDiskFeature",
@@ -13,12 +13,10 @@
     "feature.WorldGenRegionMixin",
     "ontop.place.MixinBlockBehaviours",
     "ontop.place.MixinSnowLayer",
-    "ontop.render.MixinLevel",
-    "ontop.render.MixinServerPlayerGameMode",
+    "ontop.state.MixinBlock",
     "ontop.render.target.MixinRaytrace",
     "ontop.state.MixinBlockState",
     "ontop.state.MixinBlockStateBase",
-    "ontop.state.MixinStateHolder",
     "shovel.MixinShovelItem",
     "shovel.ShovelItemAccessor"
   ],

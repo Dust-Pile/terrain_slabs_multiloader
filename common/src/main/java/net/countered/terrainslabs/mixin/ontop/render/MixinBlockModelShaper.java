@@ -13,6 +13,9 @@ import java.util.Map;
 @Mixin( BlockModelShaper.class )
 public abstract class MixinBlockModelShaper {
 
+    /**
+     * Use correct model for render
+     */
     @WrapOperation( method = "getBlockModel", at = @At( value = "INVOKE", target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;" ) )
     private Object terrain_slabs$replaceCopiedState(
             Map instance, Object o, Operation<Object> original
