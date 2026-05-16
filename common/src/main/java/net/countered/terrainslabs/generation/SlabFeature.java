@@ -172,7 +172,7 @@ public class SlabFeature extends Feature<NoneFeatureConfiguration> {
                     || ((neighborState.getBlock() instanceof SlabBlock) && neighbourCanBeSlab))
                     && !(oppositeState.getBlock() instanceof SlabBlock)
                     && !belowOppositeState.getCollisionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).isEmpty() && !(belowOppositeState.getBlock() instanceof SlabBlock)
-                    && (!level.getBlockState(neighborPos.above()).isCollisionShapeFullBlock(EmptyBlockGetter.INSTANCE, BlockPos.ZERO)))
+                    && (level.getBlockState(neighborPos.above()).getCollisionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO).isEmpty()))
             {
                 validNeighbors = true;
             }

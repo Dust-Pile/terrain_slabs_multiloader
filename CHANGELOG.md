@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.1.0]
+### Added
+Following experimental options have been added to the config:
+- add support for corner slabs
+- add support for slab run length
+
 ## [3.0.5]
 ### Fixed
 - fix blocks on slabs not rendering correctly + related crashes
