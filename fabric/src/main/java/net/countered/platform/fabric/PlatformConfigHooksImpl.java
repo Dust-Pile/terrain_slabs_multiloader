@@ -2,6 +2,10 @@ package net.countered.platform.fabric;
 
 import eu.midnightdust.lib.config.MidnightConfig;
 
+/**
+ * TODO: Permanent todo: if modifying fields labeled @Entry, corresponding fields must be updated:
+ * net.countered.terrainslabs.fabric.TerrainSlabsMixinPlugin.ConfigReader
+ */
 public class PlatformConfigHooksImpl extends MidnightConfig {
 
     public static final String GENERATION = "generation";

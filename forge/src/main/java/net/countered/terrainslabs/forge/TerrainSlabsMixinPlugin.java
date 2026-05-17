@@ -1,4 +1,4 @@
-package net.countered.terrainslabs;
+package net.countered.terrainslabs.forge;
 
 import net.countered.platform.PlatformConfigHooks;
 import org.objectweb.asm.tree.ClassNode;
@@ -24,6 +24,7 @@ public final class TerrainSlabsMixinPlugin implements IMixinConfigPlugin {
     @Override
     public void onLoad( String s ) {}
 
+    // TODO: Make platform specific versions
     /**
      * Disables vegetation mixins on load instead of during play.
      */
