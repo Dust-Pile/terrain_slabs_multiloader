@@ -1,13 +1,16 @@
 package net.countered.terrainslabs.mixin.ontop.place;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.countered.terrainslabs.block.interfaces.IOffsetState;
 import net.countered.terrainslabs.block.interfaces.ISlabCopy;
 import net.countered.terrainslabs.util.MixinHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,7 +25,8 @@ import org.spongepowered.asm.mixin.injection.At;
         "net.minecraft.world.level.block.MushroomBlock",
         "net.minecraft.world.level.block.TorchBlock",
         "net.minecraft.world.level.block.LanternBlock",
-        "net.minecraft.world.level.block.SnowLayerBlock"
+        "net.minecraft.world.level.block.SnowLayerBlock",
+        "net.minecraft.world.level.block.Block"
 })
 public class MixinBlockBehaviours {
 
@@ -69,10 +73,29 @@ public class MixinBlockBehaviours {
         return true;
     }
 
+    @SuppressWarnings("MixinAnnotationTarget")
+    @WrapMethod( method = "getStateForPlacement", require = 0 )
+    private BlockState terrain_slabs$offsetStateForPlacement(
+            BlockPlaceContext context, Operation<BlockState> original
+    ) {
+        BlockState state = original.call( context );
+        if ( !((IOffsetState) state ).terrain_slabs$hasOffsetState() ) {
+            return state;
+        }
+
+        BlockPos placePos = context.getClickedPos();
+        BlockState stateAtOffset = context.getLevel().getBlockState( placePos.below() );
+        if ( !MixinHelper.terrain_slabs$notBottomSlab( stateAtOffset ) ) {
+            return state;
+        }
+
+        return ((IOffsetState) state ).terrain_slabs$getOppositeState();
+    }
+
     /**
      * Fix particle position. Lazy implementation may need to be fixed later.
      */
-    @SuppressWarnings("MixinAnnotationTarget")
+    @SuppressWarnings({"MixinAnnotationTarget", "InvalidInjectorMethodSignature"})
     @WrapOperation( method = "animateTick", require = 0, at =
         @At( value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V" )
     )
@@ -96,7 +119,7 @@ public class MixinBlockBehaviours {
 
     @Unique
     private static boolean terrain_slabs$skipModify(BlockPos offPos, BlockState targetState, BlockPos pos ) {
-        return !MixinHelper.terrain_slabs$isStateValidOnTop( targetState )
+        return !((IOffsetState) targetState ).terrain_slabs$hasOffsetState()
                 || !( offPos.getX() == pos.getX() && offPos.getZ() == pos.getZ() && offPos.getY() == pos.getY() - 1 );
     }
 }

@@ -13,6 +13,5 @@
   },
   "mixins": [
     "compat.MixinEmbeddiumBlockRenderer"
-  ],
-  "plugin": "net.countered.terrainslabs.forge.TerrainSlabsMixinPlugin"
+  ]
 }

@@ -3,6 +3,7 @@ package net.countered.terrainslabs.mixin.ontop.state;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
+import net.countered.terrainslabs.util.MixinHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -63,9 +64,9 @@ public abstract class MixinBlockState implements IOffsetState, Cloneable {
             @SuppressWarnings("rawtypes") MapCodec mapCodec, CallbackInfo ci
     ) {
         MixinBlockState newState = this;
-//        if ( !MixinHelper.terrain_slabs$isStateValidOnTop( newState ) ) {
-//            return;
-//        }
+        if ( !MixinHelper.terrain_slabs$isStateValidOnTop( (BlockState) (Object) newState ) ) {
+            return;
+        }
 
         newState.terrain_slabs$setOppositeState( (BlockState) (Object) newState.clone()
                 .terrain_slabs$setOffset( true )

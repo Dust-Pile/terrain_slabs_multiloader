@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 
 public class MixinHelper {
 
+    // TODO: Only needed when creating offset states now. Move to there
     public static boolean terrain_slabs$isStateValidOnTop(BlockState state) {
         return state.is(ModBlockTags.ON_TOP_BLOCKS)
                 || state.getBlock() instanceof BushBlock

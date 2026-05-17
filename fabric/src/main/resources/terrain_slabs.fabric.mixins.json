@@ -11,6 +11,5 @@
   },
   "mixins": [
     "compat.MixinSodiumBlockRenderer"
-  ],
-  "plugin": "net.countered.terrainslabs.fabric.TerrainSlabsMixinPlugin"
+  ]
 }

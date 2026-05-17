@@ -24,6 +24,7 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "plugin": "net.countered.terrainslabs.mixin_applier.TerrainSlabsMixinPlugin"
 }
 

@@ -4,7 +4,7 @@ import eu.midnightdust.lib.config.MidnightConfig;
 
 /**
  * TODO: Permanent todo: if modifying fields labeled @Entry, corresponding fields must be updated:
- * net.countered.terrainslabs.fabric.TerrainSlabsMixinPlugin.ConfigReader
+ * net.countered.terrainslabs.MixinApplier.TerrainSlabsMixinPlugin.ConfigReader
  */
 public class PlatformConfigHooksImpl extends MidnightConfig {
 
