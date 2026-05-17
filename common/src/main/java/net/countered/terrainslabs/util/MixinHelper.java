@@ -1,7 +1,6 @@
 package net.countered.terrainslabs.util;
 
-import net.countered.platform.PlatformConfigHooks;
-import net.countered.terrainslabs.block.ModBlockTags;
+import net.countered.terrainslabs.block.interfaces.IOffsetState;
 import net.countered.terrainslabs.block.interfaces.ISlabCopy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
@@ -12,15 +11,6 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
 public class MixinHelper {
-
-    // TODO: Only needed when creating offset states now. Move to there
-    public static boolean terrain_slabs$isStateValidOnTop(BlockState state) {
-        return state.is(ModBlockTags.ON_TOP_BLOCKS)
-                || state.getBlock() instanceof BushBlock
-                || state.getBlock() instanceof TorchBlock
-                || state.getBlock() instanceof LanternBlock;
-    }
-
     public static boolean terrain_slabs$notBottomSlab( BlockState state ) {
         return !( state.getBlock() instanceof ISlabCopy)
                 || state.getValue( SlabBlock.TYPE ) != SlabType.BOTTOM;
@@ -28,10 +18,11 @@ public class MixinHelper {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean checkOnTopState(BlockGetter level, BlockPos pos, BlockState state ) {
-        if ( !MixinHelper.terrain_slabs$isStateValidOnTop(state) ) {
+        if ( !((IOffsetState) state ).terrain_slabs$hasOffsetState() ) {
             return false;
         }
 
+        // TODO: implement in double plant block
         BlockPos belowPos = pos.below();
         if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER) {
             belowPos = pos.below(2);

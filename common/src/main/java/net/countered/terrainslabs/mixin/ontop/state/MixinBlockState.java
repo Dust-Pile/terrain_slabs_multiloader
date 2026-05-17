@@ -2,9 +2,13 @@ package net.countered.terrainslabs.mixin.ontop.state;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
+import net.countered.terrainslabs.block.ModBlockTags;
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
 import net.countered.terrainslabs.util.MixinHelper;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.LanternBlock;
+import net.minecraft.world.level.block.TorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -13,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Create unique blockstates for offset blocks
+ * Create unique blockstates for offset blocks. This is where offset is filtered.
  */
 @Mixin( BlockState.class )
 public abstract class MixinBlockState implements IOffsetState, Cloneable {
@@ -64,7 +68,7 @@ public abstract class MixinBlockState implements IOffsetState, Cloneable {
             @SuppressWarnings("rawtypes") MapCodec mapCodec, CallbackInfo ci
     ) {
         MixinBlockState newState = this;
-        if ( !MixinHelper.terrain_slabs$isStateValidOnTop( (BlockState) (Object) newState ) ) {
+        if ( !terrain_slabs$isStateValidOnTop( (BlockState) (Object) newState ) ) {
             return;
         }
 
@@ -72,5 +76,13 @@ public abstract class MixinBlockState implements IOffsetState, Cloneable {
                 .terrain_slabs$setOffset( true )
                 .terrain_slabs$setOppositeState( (BlockState) (Object) newState )
         );
+    }
+
+    @Unique
+    private static boolean terrain_slabs$isStateValidOnTop(BlockState state) {
+        return state.is(ModBlockTags.ON_TOP_BLOCKS)
+                || state.getBlock() instanceof BushBlock
+                || state.getBlock() instanceof TorchBlock
+                || state.getBlock() instanceof LanternBlock;
     }
 }

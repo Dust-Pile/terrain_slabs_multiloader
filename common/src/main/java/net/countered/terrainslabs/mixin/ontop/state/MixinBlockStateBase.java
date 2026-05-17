@@ -5,32 +5,20 @@ import net.countered.terrainslabs.util.MixinHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-// TODO: Disable ontop mixins when ontop plants disabled
 @Mixin(BlockBehaviour.BlockStateBase.class)
 public abstract class MixinBlockStateBase implements IOffsetState {
-
-
-    //==========//
-    // Updating //
-    //==========//
-
-
     /**
      * Offset state on update as a final step
      */
@@ -53,27 +41,6 @@ public abstract class MixinBlockStateBase implements IOffsetState {
             level.setBlock( pos, newState.terrain_slabs$getOppositeState(), Block.UPDATE_ALL );
         }
     }
-
-    // TODO: This should be handled by "getStateForPlacement" in Block, but this is easy for now
-//    @Inject( method = "onPlace", at = @At("TAIL") )
-//    private void terrain_slabs$updateOffsetOnPlace(
-//            Level level, BlockPos pos, BlockState oldState, boolean movedByPiston, CallbackInfo ci
-//    ) {
-//        IOffsetState newState = (IOffsetState) level.getBlockState( pos );
-//        if ( !newState.terrain_slabs$hasOffsetState() ) {
-//            return;
-//        }
-//
-//        if ( MixinHelper.checkOnTopState( level, pos, newState.asState() ) != newState.terrain_slabs$getOffset() ) {
-//            level.setBlock( pos, newState.terrain_slabs$getOppositeState(), Block.UPDATE_ALL );
-//        }
-//    }
-
-
-    //===========//
-    // Rendering //
-    //===========//
-
 
     /**
      * Mixin for shifting down the visual texture of blocks on slabs
