@@ -13,11 +13,12 @@
     "feature.WorldGenRegionMixin",
     "ontop.place.MixinBlockBehaviours",
     "ontop.place.MixinSnowLayer",
+    "ontop.render.MixinBlockStateBaseOcclusion",
     "ontop.render.target.MixinRaytrace",
     "ontop.state.MixinBlock",
     "ontop.state.MixinBlockState",
     "ontop.state.MixinBlockStateBase",
-    "ontop.render.MixinBlockStateBaseOcclusion",
+    "ontop.state.MixinStateDefinition",
     "shovel.MixinShovelItem",
     "shovel.ShovelItemAccessor"
   ],

@@ -21,7 +21,8 @@ import org.spongepowered.asm.mixin.injection.At;
         "net.minecraft.world.level.block.BushBlock",
         "net.minecraft.world.level.block.MushroomBlock",
         "net.minecraft.world.level.block.TorchBlock",
-        "net.minecraft.world.level.block.LanternBlock"
+        "net.minecraft.world.level.block.LanternBlock",
+        "net.minecraft.world.level.block.SnowLayerBlock"
 })
 public class MixinBlockBehaviours {
 
