@@ -12,12 +12,12 @@ import static net.countered.terrainslabs.mixin_applier.EarlyConfigReader.CTS_CON
 @SuppressWarnings("unused")
 public final class TerrainSlabsMixinPlugin implements IMixinConfigPlugin {
     private static final List<String> ONTOP_VEGETATION_MIXIN_CLASSES = List.of(
-            "net.countered.terrainslabs.mixin.ontop.place.MixinBlockBehaviours",
-            "net.countered.terrainslabs.mixin.ontop.render.MixinBlockModelShaper",
-            "net.countered.terrainslabs.mixin.ontop.render.MixinLevelRenderer",
-            "net.countered.terrainslabs.mixin.ontop.state.MixinBlock",
-            "net.countered.terrainslabs.mixin.ontop.state.MixinBlockState",
-            "net.countered.terrainslabs.mixin.ontop.state.MixinBlockStateBase"
+//            "net.countered.terrainslabs.mixin.ontop.place.MixinBlockBehaviours",
+//            "net.countered.terrainslabs.mixin.ontop.render.MixinBlockModelShaper",
+//            "net.countered.terrainslabs.mixin.ontop.render.MixinLevelRenderer",
+//            "net.countered.terrainslabs.mixin.ontop.state.MixinBlock",
+//            "net.countered.terrainslabs.mixin.ontop.state.MixinBlockState",
+//            "net.countered.terrainslabs.mixin.ontop.state.MixinBlockStateBase"
     );
 
     @Override
@@ -32,7 +32,7 @@ public final class TerrainSlabsMixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin( String targetClassName, String mixinClassName ) {
         assert CTS_CONFIGS != null;
-        return CTS_CONFIGS.enableVegetationOnSlabs || !ONTOP_VEGETATION_MIXIN_CLASSES.contains(mixinClassName);
+        return CTS_CONFIGS.enableVegetationOnSlabs() || !ONTOP_VEGETATION_MIXIN_CLASSES.contains(mixinClassName);
     }
 
     public String getRefMapperConfig() {return null;}

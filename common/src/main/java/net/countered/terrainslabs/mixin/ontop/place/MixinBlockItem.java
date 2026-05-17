@@ -1,4 +1,4 @@
-package net.countered.terrainslabs.mixin.ontop.state;
+package net.countered.terrainslabs.mixin.ontop.place;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -19,7 +19,7 @@ public class MixinBlockItem {
             BlockItem instance, BlockPlaceContext context, Operation<BlockState> original
     ) {
         BlockState state = original.call( instance, context );
-        if ( !((IOffsetState) state ).terrain_slabs$hasOffsetState() ) {
+        if ( state == null || !((IOffsetState) state ).terrain_slabs$hasOffsetState() ) {
             return state;
         }
 
@@ -31,5 +31,4 @@ public class MixinBlockItem {
 
         return ((IOffsetState) state ).terrain_slabs$getOppositeState();
     }
-
 }

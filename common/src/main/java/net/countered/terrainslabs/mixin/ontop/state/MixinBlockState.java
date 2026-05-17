@@ -2,13 +2,10 @@ package net.countered.terrainslabs.mixin.ontop.state;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.MapCodec;
-import net.countered.terrainslabs.block.ModBlockTags;
+import net.countered.platform.PlatformConfigHooks;
+import net.countered.terrainslabs.TerrainSlabs;
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
-import net.countered.terrainslabs.util.MixinHelper;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.LanternBlock;
-import net.minecraft.world.level.block.TorchBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -60,7 +57,6 @@ public abstract class MixinBlockState implements IOffsetState, Cloneable {
         }
     }
 
-    // TODO: Restrict which blocks get states (tag will not work for this...)
     @SuppressWarnings("DataFlowIssue")
     @Inject( method = "<init>", at = @At("RETURN"))
     private void terrain_slabs$offsetAppender(
@@ -68,7 +64,7 @@ public abstract class MixinBlockState implements IOffsetState, Cloneable {
             @SuppressWarnings("rawtypes") MapCodec mapCodec, CallbackInfo ci
     ) {
         MixinBlockState newState = this;
-        if ( !terrain_slabs$isStateValidOnTop( (BlockState) (Object) newState ) ) {
+        if ( !terrain_slabs$shouldMirrorState( (BlockState) (Object) newState ) ) {
             return;
         }
 
@@ -79,10 +75,29 @@ public abstract class MixinBlockState implements IOffsetState, Cloneable {
     }
 
     @Unique
-    private static boolean terrain_slabs$isStateValidOnTop(BlockState state) {
-        return state.is(ModBlockTags.ON_TOP_BLOCKS)
-                || state.getBlock() instanceof BushBlock
-                || state.getBlock() instanceof TorchBlock
-                || state.getBlock() instanceof LanternBlock;
+    private static boolean terrain_slabs$shouldMirrorState(BlockState state ) {
+        Block block = state.getBlock();
+        if ( terrain_slabs$isDefaultEnabled( state ) ) {
+            return !PlatformConfigHooks.excludeOnTop( block );
+        }
+
+        return PlatformConfigHooks.includeOntop( block );
+    }
+
+    // This is getting complicated, needs to be easier to read.
+    @Unique
+    private static boolean terrain_slabs$isDefaultEnabled(BlockState state) {
+        Block block = state.getBlock();
+        if ( block instanceof BushBlock ) {
+            return PlatformConfigHooks.isVegetationOnSlabsEnabled();
+
+        } else if ( block instanceof TorchBlock || block instanceof LanternBlock ) {
+            return !(block instanceof WallTorchBlock) && !(block instanceof RedstoneWallTorchBlock);
+
+        } else if ( block instanceof SnowLayerBlock ) {
+            return PlatformConfigHooks.isSnowOnSlabsEnabled();
+        }
+
+        return false;
     }
 }
