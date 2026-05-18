@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
 import net.countered.terrainslabs.util.MixinHelper;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,16 +18,14 @@ public class MixinBlockItem {
             BlockItem instance, BlockPlaceContext context, Operation<BlockState> original
     ) {
         BlockState state = original.call( instance, context );
-        if ( state == null || !((IOffsetState) state ).terrain_slabs$hasOffsetState() ) {
-            return state;
+        if ( state == null ) {
+            return null;
         }
 
-        BlockPos placePos = context.getClickedPos();
-        BlockState stateAtOffset = context.getLevel().getBlockState( placePos.below() );
-        if ( MixinHelper.notBottomSlab( stateAtOffset ) ) {
-            return state;
+        if ( MixinHelper.shouldBeOnTopState( context.getLevel(), context.getClickedPos(), state ) ) {
+            return ((IOffsetState) state ).terrain_slabs$getOffsetState();
         }
 
-        return ((IOffsetState) state ).terrain_slabs$getOppositeState();
+        return state;
     }
 }

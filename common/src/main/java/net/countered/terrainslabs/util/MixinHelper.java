@@ -16,8 +16,12 @@ public class MixinHelper {
                 || state.getValue( SlabBlock.TYPE ) != SlabType.BOTTOM;
     }
 
+    private static boolean isBottomSlab( BlockState state ) {
+        return state.getBlock() instanceof ISlabCopy && state.getValue( SlabBlock.TYPE ) == SlabType.BOTTOM;
+    }
+
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean checkOnTopState(BlockGetter level, BlockPos pos, BlockState state ) {
+    public static boolean shouldBeOnTopState( BlockGetter level, BlockPos pos, BlockState state ) {
         if ( !((IOffsetState) state ).terrain_slabs$hasOffsetState() ) {
             return false;
         }
@@ -29,11 +33,6 @@ public class MixinHelper {
         }
 
         BlockState belowState = level.getBlockState(belowPos);
-
-        if (belowState.is(BlockTags.SLABS)) {
-            return belowState.hasProperty(SlabBlock.TYPE) && belowState.getValue(SlabBlock.TYPE) == SlabType.BOTTOM;
-        }
-
-        return false;
+        return isBottomSlab( belowState ) || ( (IOffsetState) belowState ).terrain_slabs$isOffset();
     }
 }

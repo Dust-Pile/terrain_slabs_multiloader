@@ -36,6 +36,26 @@ public class MixinBlockState implements IOffsetState {
     }
 
     @Override
+    public BlockState terrain_slabs$getNormalState() {
+        BlockState state = ((BlockState) (Object) this );
+        if ( this.terrain_slabs$isOffset() ) {
+            return state.setValue( this.terrain_slabs$getOffsetProperty(), OffsetProperty.OffsetType.NONE );
+        }
+
+        return state;
+    }
+
+    @Override
+    public BlockState terrain_slabs$getOffsetState() {
+        BlockState state = ((BlockState) (Object) this );
+        if ( this.terrain_slabs$getOffsetProperty() == OffsetProperty.ONTOP) {
+            return state.setValue( this.terrain_slabs$getOffsetProperty(), OffsetProperty.OffsetType.ONTOP );
+        }
+
+        return null;
+    }
+
+    @Override
     public BlockState terrain_slabs$getOppositeState() {
         BlockState state = ((BlockState) (Object) this );
         if ( this.terrain_slabs$isOffset() ) {

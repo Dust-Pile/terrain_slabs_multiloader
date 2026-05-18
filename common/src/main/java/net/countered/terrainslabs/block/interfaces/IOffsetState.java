@@ -14,4 +14,8 @@ public interface IOffsetState {
 
     BlockState terrain_slabs$getOppositeState();
 
+    BlockState terrain_slabs$getNormalState();
+
+    BlockState terrain_slabs$getOffsetState();
+
 }

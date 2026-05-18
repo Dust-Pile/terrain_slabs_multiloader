@@ -5,6 +5,7 @@ import net.countered.terrainslabs.util.MixinHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -13,12 +14,21 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockBehaviour.BlockStateBase.class)
 public class MixinBlockStateBase {
+
+
+    //========//
+    // Update //
+    //========//
+
+
     /**
      * Offset state on update as a final step
      */
@@ -32,15 +42,38 @@ public class MixinBlockStateBase {
             return;
         }
 
-        IOffsetState newState = (IOffsetState) level.getBlockState( pos );
-        if ( !newState.terrain_slabs$hasOffsetState() ) {
-            return;
-        }
+        terrain_slabs$checkAndSwitch( level, pos );
+    }
 
-        if ( MixinHelper.checkOnTopState( level, pos, (BlockState) newState ) != newState.terrain_slabs$isOffset() ) {
+    @Inject( method = "neighborChanged", at = @At("TAIL") )
+    private void terrain_slabs$updateOffsetForNeighbor(
+            Level level, BlockPos pos, Block neighborBlock,
+            BlockPos neighborPos, boolean movedByPiston, CallbackInfo ci
+    ) {
+        terrain_slabs$checkAndSwitch( level, pos );
+    }
+
+    @Inject( method = "onPlace", at = @At("TAIL") )
+    private void terrain_slabs$updateOffsetOnPlace(
+            Level level, BlockPos pos, BlockState oldState,
+            boolean movedByPiston, CallbackInfo ci
+    ) {
+        terrain_slabs$checkAndSwitch( level, pos );
+    }
+
+    @Unique
+    private void terrain_slabs$checkAndSwitch( LevelAccessor level, BlockPos pos ) {
+        IOffsetState newState = (IOffsetState) level.getBlockState( pos );
+        if ( MixinHelper.shouldBeOnTopState( level, pos, (BlockState) newState ) != newState.terrain_slabs$isOffset() ) {
             level.setBlock( pos, newState.terrain_slabs$getOppositeState(), Block.UPDATE_ALL );
         }
     }
+
+
+    //========//
+    // Render //
+    //========//
+
 
     /**
      * Mixin for shifting down the visual texture of blocks on slabs

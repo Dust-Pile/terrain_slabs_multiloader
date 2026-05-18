@@ -9,7 +9,6 @@
     "feature.WorldGenRegionMixin",
     "ontop.place.MixinBlockBehaviours",
     "ontop.place.MixinBlockItem",
-    "ontop.place.MixinSnowLayer",
     "ontop.render.MixinBlockStateBaseOcclusion",
     "ontop.render.target.MixinRaytrace",
     "ontop.state.MixinBlockState",
