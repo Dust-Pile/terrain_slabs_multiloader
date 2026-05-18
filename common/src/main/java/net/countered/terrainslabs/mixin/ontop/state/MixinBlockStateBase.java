@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockBehaviour.BlockStateBase.class)
-public abstract class MixinBlockStateBase implements IOffsetState {
+public class MixinBlockStateBase {
     /**
      * Offset state on update as a final step
      */
@@ -37,7 +37,7 @@ public abstract class MixinBlockStateBase implements IOffsetState {
             return;
         }
 
-        if ( MixinHelper.checkOnTopState( level, pos, newState.asState() ) != newState.terrain_slabs$getOffset() ) {
+        if ( MixinHelper.checkOnTopState( level, pos, (BlockState) newState ) != newState.terrain_slabs$isOffset() ) {
             level.setBlock( pos, newState.terrain_slabs$getOppositeState(), Block.UPDATE_ALL );
         }
     }
@@ -47,7 +47,7 @@ public abstract class MixinBlockStateBase implements IOffsetState {
      */
     @Inject(method = "getOffset", at = @At("RETURN"), cancellable = true)
     private void terrain_slabs$getOffset(BlockGetter level, BlockPos pos, CallbackInfoReturnable<Vec3> cir) {
-        if ( !this.terrain_slabs$getOffset() ) return;
+        if ( !((IOffsetState) this ).terrain_slabs$isOffset() ) return;
 
         Vec3 currentOffset = cir.getReturnValue();
         cir.setReturnValue(new Vec3(currentOffset.x, -0.5, currentOffset.z));
@@ -61,9 +61,9 @@ public abstract class MixinBlockStateBase implements IOffsetState {
             at = @At("RETURN"),
             cancellable = true)
     private void terrain_slabs$smartShapeOffset(BlockGetter level, BlockPos pos, CollisionContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if ( !this.terrain_slabs$getOffset() ) return;
+        if ( !((IOffsetState) this ).terrain_slabs$isOffset() ) return;
 
-        Vec3 offset = this.asState().getOffset(level, pos);
+        Vec3 offset = ( (BlockState) (Object) this ).getOffset(level, pos);
         // TODO: Make this more robust for XYZ offset type
         // fix for flowers moving their shape themselves
         if (offset.y < 0) {

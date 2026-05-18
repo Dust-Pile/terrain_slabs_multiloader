@@ -40,7 +40,7 @@ public class MixinBlockBehaviours {
             BlockState state, LevelReader level, BlockPos pos
     ) {
         BlockState stateAtOffset = original.call( instance, offPos );
-        if ( terrain_slabs$skipModify( offPos, state, pos ) || MixinHelper.terrain_slabs$notBottomSlab( stateAtOffset ) ) {
+        if ( terrain_slabs$skipModify( offPos, state, pos ) || MixinHelper.notBottomSlab( stateAtOffset ) ) {
             return stateAtOffset;
         }
 
@@ -63,7 +63,7 @@ public class MixinBlockBehaviours {
         if (
                 direction != Direction.UP
                 || terrain_slabs$skipModify( offsetPos, state, pos )
-                || MixinHelper.terrain_slabs$notBottomSlab( level.getBlockState( offsetPos ) )
+                || MixinHelper.notBottomSlab( level.getBlockState( offsetPos ) )
         ) {
             return origOutput;
         }

@@ -25,7 +25,7 @@ public class MixinBlockItem {
 
         BlockPos placePos = context.getClickedPos();
         BlockState stateAtOffset = context.getLevel().getBlockState( placePos.below() );
-        if ( MixinHelper.terrain_slabs$notBottomSlab( stateAtOffset ) ) {
+        if ( MixinHelper.notBottomSlab( stateAtOffset ) ) {
             return state;
         }
 

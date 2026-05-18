@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
 public class MixinHelper {
-    public static boolean terrain_slabs$notBottomSlab( BlockState state ) {
+    public static boolean notBottomSlab(BlockState state ) {
         return !( state.getBlock() instanceof ISlabCopy)
                 || state.getValue( SlabBlock.TYPE ) != SlabType.BOTTOM;
     }

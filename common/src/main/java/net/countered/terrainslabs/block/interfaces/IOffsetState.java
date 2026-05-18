@@ -1,24 +1,17 @@
 package net.countered.terrainslabs.block.interfaces;
 
+import net.countered.terrainslabs.block.OffsetProperty;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 public interface IOffsetState {
 
-    static BlockState getStandardState( BlockState state ) {
-        if ( ((IOffsetState) state).terrain_slabs$getOffset() ) {
-            return ((IOffsetState) state).terrain_slabs$getOppositeState();
-        }
+    boolean terrain_slabs$isOffset();
 
-        return state;
-    }
-
-    boolean terrain_slabs$getOffset();
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean terrain_slabs$hasOffsetState();
 
-    BlockState terrain_slabs$getOppositeState();
+    EnumProperty<OffsetProperty.OffsetType> terrain_slabs$getOffsetProperty();
 
-    BlockState asState();
+    BlockState terrain_slabs$getOppositeState();
 
 }

@@ -1,103 +1,51 @@
 package net.countered.terrainslabs.mixin.ontop.state;
 
-import com.google.common.collect.ImmutableMap;
-import com.mojang.serialization.MapCodec;
-import net.countered.platform.PlatformConfigHooks;
-import net.countered.terrainslabs.TerrainSlabs;
+import net.countered.terrainslabs.block.OffsetProperty;
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
-import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Create unique blockstates for offset blocks. This is where offset is filtered.
+ * Include helpful methods
  */
 @Mixin( BlockState.class )
-public abstract class MixinBlockState implements IOffsetState, Cloneable {
-    @Unique
-    protected boolean terrain_slabs$isOffset = false;
-    @Unique
-    protected BlockState terrain_slabs$oppositeState = null;
+public class MixinBlockState implements IOffsetState {
 
     @Override
-    public boolean terrain_slabs$getOffset() {
-        return terrain_slabs$isOffset;
+    public boolean terrain_slabs$isOffset() {
+        BlockState state = ((BlockState) (Object) this );
+        return this.terrain_slabs$hasOffsetState() ?
+                state.getValue( this.terrain_slabs$getOffsetProperty() ) != OffsetProperty.OffsetType.NONE
+                : false;
     }
+
     @Override
     public boolean terrain_slabs$hasOffsetState() {
-        return terrain_slabs$oppositeState != null;
-    }
-    @Override
-    public BlockState terrain_slabs$getOppositeState() {
-        return terrain_slabs$oppositeState;
-    }
+        return this.terrain_slabs$getOffsetProperty() != null;
+    };
 
-    @SuppressWarnings("SameParameterValue")
-    @Unique
-    protected MixinBlockState terrain_slabs$setOffset( boolean bool ) {
-        terrain_slabs$isOffset = bool;
-        return this;
-    }
-    @Unique
-    protected MixinBlockState terrain_slabs$setOppositeState( BlockState state ) {
-        terrain_slabs$oppositeState = state;
-        return this;
+    @Override
+    public EnumProperty<OffsetProperty.OffsetType> terrain_slabs$getOffsetProperty() {
+        BlockState state = ((BlockState) (Object) this );
+        if ( state.hasProperty( OffsetProperty.ONTOP) ) {
+            return OffsetProperty.ONTOP;
+        }
+
+        return null;
     }
 
     @Override
-    public MixinBlockState clone() {
-        try {
-            return (MixinBlockState) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
-    }
-
-    @SuppressWarnings("DataFlowIssue")
-    @Inject( method = "<init>", at = @At("RETURN"))
-    private void terrain_slabs$offsetAppender(
-            Block block, @SuppressWarnings("rawtypes") ImmutableMap immutableMap,
-            @SuppressWarnings("rawtypes") MapCodec mapCodec, CallbackInfo ci
-    ) {
-        MixinBlockState newState = this;
-        if ( !terrain_slabs$shouldMirrorState( (BlockState) (Object) newState ) ) {
-            return;
+    public BlockState terrain_slabs$getOppositeState() {
+        BlockState state = ((BlockState) (Object) this );
+        if ( this.terrain_slabs$isOffset() ) {
+            return state.setValue( this.terrain_slabs$getOffsetProperty(), OffsetProperty.OffsetType.NONE );
         }
 
-        newState.terrain_slabs$setOppositeState( (BlockState) (Object) newState.clone()
-                .terrain_slabs$setOffset( true )
-                .terrain_slabs$setOppositeState( (BlockState) (Object) newState )
-        );
-    }
-
-    @Unique
-    private static boolean terrain_slabs$shouldMirrorState(BlockState state ) {
-        Block block = state.getBlock();
-        if ( terrain_slabs$isDefaultEnabled( state ) ) {
-            return !PlatformConfigHooks.excludeOnTop( block );
+        if ( this.terrain_slabs$getOffsetProperty() == OffsetProperty.ONTOP) {
+            return state.setValue( this.terrain_slabs$getOffsetProperty(), OffsetProperty.OffsetType.ONTOP );
         }
 
-        return PlatformConfigHooks.includeOntop( block );
-    }
-
-    // This is getting complicated, needs to be easier to read.
-    @Unique
-    private static boolean terrain_slabs$isDefaultEnabled(BlockState state) {
-        Block block = state.getBlock();
-        if ( block instanceof BushBlock ) {
-            return PlatformConfigHooks.isVegetationOnSlabsEnabled();
-
-        } else if ( block instanceof TorchBlock || block instanceof LanternBlock ) {
-            return !(block instanceof WallTorchBlock) && !(block instanceof RedstoneWallTorchBlock);
-
-        } else if ( block instanceof SnowLayerBlock ) {
-            return PlatformConfigHooks.isSnowOnSlabsEnabled();
-        }
-
-        return false;
+        return null;
     }
 }

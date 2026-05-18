@@ -3,22 +3,17 @@
   "package": "net.countered.terrainslabs.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
-  "client": [
-    "ontop.render.MixinBlockModelShaper",
-    "ontop.render.MixinLevelRenderer"
-  ],
   "mixins": [
     "feature.MixinDiskFeature",
     "feature.MixinOreFeature",
     "feature.WorldGenRegionMixin",
     "ontop.place.MixinBlockBehaviours",
+    "ontop.place.MixinBlockItem",
     "ontop.place.MixinSnowLayer",
     "ontop.render.MixinBlockStateBaseOcclusion",
     "ontop.render.target.MixinRaytrace",
-    "ontop.state.MixinBlock",
-    "ontop.place.MixinBlockItem",
-    "ontop.state.MixinBlockState",
     "ontop.state.MixinBlockStateBase",
+    "ontop.state.MixinBlockState",
     "ontop.state.MixinStateDefinition",
     "shovel.MixinShovelItem",
     "shovel.ShovelItemAccessor"
