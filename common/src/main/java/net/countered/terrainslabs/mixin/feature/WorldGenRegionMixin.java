@@ -1,7 +1,7 @@
 package net.countered.terrainslabs.mixin.feature;
 
 import net.countered.terrainslabs.block.ModSlabsMap;
-import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
+import net.countered.terrainslabs.block.customslabs.CustomSlab;
 import net.countered.terrainslabs.registries.ModBlocksRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.WorldGenRegion;

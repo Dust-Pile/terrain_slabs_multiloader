@@ -1,6 +1,8 @@
-package net.countered.terrainslabs.block.customslabs.specialslabs;
+package net.countered.terrainslabs.block.customslabs;
 
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -22,6 +24,14 @@ public class CustomSlab extends SlabBlock {
                 .setValue(TYPE, SlabType.BOTTOM)
                 .setValue(WATERLOGGED, false)
                 .setValue(GENERATED, false));
+    }
+
+    /**
+     * Replace the slab at the given position with another slab block while preserving the slab TYPE (BOTTOM/TOP/DOUBLE).
+     */
+    protected static void replaceWithSlabPreserveType(Level level, BlockPos pos, BlockState currentState, Block targetSlab) {
+        SlabType slabType = currentState.getValue(TYPE);
+        level.setBlockAndUpdate(pos, targetSlab.defaultBlockState().setValue(TYPE, slabType));
     }
 
     @Override

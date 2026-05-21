@@ -1,15 +1,18 @@
 package net.countered.terrainslabs.block.customslabs.soilslabs;
 
-import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
+import net.countered.terrainslabs.block.customslabs.CustomSlab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -18,13 +21,14 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 
-public class PodzolSlab extends CustomSlab {
+public class SoilSlab extends CustomSlab {
+
     public static final BooleanProperty SNOWY;
     static {
         SNOWY = BlockStateProperties.SNOWY;
     }
 
-    public PodzolSlab(BlockBehaviour.Properties properties) {
+    public SoilSlab(Properties properties) {
         super(properties);
         this.registerDefaultState(this.defaultBlockState()
                 .setValue(TYPE, SlabType.BOTTOM)
@@ -67,6 +71,27 @@ public class PodzolSlab extends CustomSlab {
 
     private static boolean isSnow(BlockState state) {
         return state.is(BlockTags.SNOW);
+    }
+
+    /**
+     * Shared logic for grass-like blocks (Grass, Mycelium) to determine if they can remain.
+     */
+    protected static boolean canBeGrassLike(BlockState state, LevelReader levelReader, BlockPos pos) {
+        BlockPos blockPos = pos.above();
+        BlockState blockState = levelReader.getBlockState(blockPos);
+        if (blockState.is(Blocks.SNOW) && (Integer)blockState.getValue(SnowLayerBlock.LAYERS) == 1) {
+            return true;
+        } else if (blockState.getFluidState().getAmount() == 8) {
+            return false;
+        } else {
+            int i = LightEngine.getLightBlockInto(state, Blocks.GRASS_BLOCK.defaultBlockState(), Direction.UP, blockState.getLightBlock());
+            return i < 15;
+        }
+    }
+
+    protected static boolean canPropagateGrassLike(BlockState state, LevelReader level, BlockPos pos) {
+        BlockPos blockPos = pos.above();
+        return canBeGrassLike(state, level, pos) && !level.getFluidState(blockPos).is(FluidTags.WATER);
     }
 
     @Override

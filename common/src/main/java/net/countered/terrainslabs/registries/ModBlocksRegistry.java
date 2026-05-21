@@ -4,16 +4,16 @@ import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.countered.terrainslabs.TerrainSlabs;
+import net.countered.terrainslabs.block.customslabs.CustomSlab;
+import net.countered.terrainslabs.block.customslabs.GravityAffectedSlab;
+import net.countered.terrainslabs.block.customslabs.netherslabs.NetherrackSlab;
+import net.countered.terrainslabs.block.customslabs.netherslabs.NyliumSlab;
+import net.countered.terrainslabs.block.customslabs.nonfullslabs.MudSlab;
+import net.countered.terrainslabs.block.customslabs.nonfullslabs.PathSlab;
+import net.countered.terrainslabs.block.customslabs.nonfullslabs.SoulSandSlab;
 import net.countered.terrainslabs.block.customslabs.soilslabs.GrassSlab;
 import net.countered.terrainslabs.block.customslabs.soilslabs.MyceliumSlab;
-import net.countered.terrainslabs.block.customslabs.soilslabs.PathSlab;
-import net.countered.terrainslabs.block.customslabs.soilslabs.PodzolSlab;
-import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
-import net.countered.terrainslabs.block.customslabs.specialslabs.GravityAffectedSlab;
-import net.countered.terrainslabs.block.customslabs.specialslabs.MudSlab;
-import net.countered.terrainslabs.block.customslabs.specialslabs.dimensions.NetherrackSlab;
-import net.countered.terrainslabs.block.customslabs.specialslabs.dimensions.NyliumSlab;
-import net.countered.terrainslabs.block.customslabs.specialslabs.dimensions.SoulSandSlab;
+import net.countered.terrainslabs.block.customslabs.soilslabs.SoilSlab;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -134,7 +134,7 @@ public class ModBlocksRegistry {
     public static final RegistrySupplier<Block> PODZOL_SLAB = registerBlock(
             "podzol_slab",
             BlockBehaviour.Properties.ofFullCopy(Blocks.PODZOL),
-            PodzolSlab::new
+            SoilSlab::new
     );
     public static final RegistrySupplier<Block> PATH_SLAB = registerBlock(
             "path_slab",

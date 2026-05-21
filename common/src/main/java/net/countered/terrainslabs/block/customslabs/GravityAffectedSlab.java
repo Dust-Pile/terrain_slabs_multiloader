@@ -1,4 +1,4 @@
-package net.countered.terrainslabs.block.customslabs.specialslabs;
+package net.countered.terrainslabs.block.customslabs;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,12 +11,13 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Fallable;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -25,15 +26,6 @@ public class GravityAffectedSlab extends CustomSlab implements Fallable {
 
     public GravityAffectedSlab(BlockBehaviour.Properties properties) {
         super(properties);
-        this.registerDefaultState(this.defaultBlockState()
-                .setValue(TYPE, SlabType.BOTTOM)
-                .setValue(WATERLOGGED,false)
-                .setValue(GENERATED,false));
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(TYPE, WATERLOGGED, GENERATED);
     }
 
     @Override

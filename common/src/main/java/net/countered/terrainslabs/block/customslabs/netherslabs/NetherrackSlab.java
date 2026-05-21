@@ -1,35 +1,24 @@
-package net.countered.terrainslabs.block.customslabs.specialslabs.dimensions;
+package net.countered.terrainslabs.block.customslabs.netherslabs;
 
+import net.countered.terrainslabs.block.customslabs.CustomSlab;
 import net.countered.terrainslabs.registries.ModBlocksRegistry;
-import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
 public class NetherrackSlab extends CustomSlab implements BonemealableBlock {
 
     public NetherrackSlab(BlockBehaviour.Properties properties) {
         super(properties);
-        this.registerDefaultState(this.defaultBlockState()
-                .setValue(TYPE, SlabType.BOTTOM)
-                .setValue(WATERLOGGED, false)
-                .setValue(GENERATED, false));
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(TYPE, WATERLOGGED, GENERATED);
     }
 
     @Override
@@ -42,7 +31,6 @@ public class NetherrackSlab extends CustomSlab implements BonemealableBlock {
                     return true;
                 }
             }
-
             return false;
         }
     }
