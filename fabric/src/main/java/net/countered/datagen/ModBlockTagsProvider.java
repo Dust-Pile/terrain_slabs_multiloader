@@ -18,16 +18,16 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider arg) {
-        this.getOrCreateTagBuilder(BlockTags.SNOW_LAYER_CAN_SURVIVE_ON).addTag(BlockTags.SLABS);
+        this.builder(BlockTags.SNOW_LAYER_CAN_SURVIVE_ON).addTag(BlockTags.SLABS);
 
-        this.getOrCreateTagBuilder(ModBlockTags.ON_TOP_BLOCKS).add(Blocks.SNOW);
+        this.builder(ModBlockTags.ON_TOP_BLOCKS).add(Blocks.SNOW.builtInRegistryHolder().key());
 
-        this.getOrCreateTagBuilder(BlockTags.DEAD_BUSH_MAY_PLACE_ON)
-                .addTag(ModBlockTags.DIRT_SLABS)
-                .add(ModBlocksRegistry.SAND_SLAB.getKey(), ModBlocksRegistry.RED_SAND_SLAB.getKey())
-                .addTag(ModBlockTags.TERRACOTTA_SLABS);
+//        TODO this.builder(BlockTags.DEAD_BUSH_MAY_PLACE_ON)
+//                .addTag(ModBlockTags.DIRT_SLABS)
+//                .add(ModBlocksRegistry.SAND_SLAB.getKey(), ModBlocksRegistry.RED_SAND_SLAB.getKey())
+//                .addTag(ModBlockTags.TERRACOTTA_SLABS);
 
-        this.getOrCreateTagBuilder(ModBlockTags.TERRACOTTA_SLABS).add(
+        this.builder(ModBlockTags.TERRACOTTA_SLABS).add(
                 ModBlocksRegistry.TERRACOTTA_SLAB.getKey(),
                 ModBlocksRegistry.RED_TERRACOTTA_SLAB.getKey(),
                 ModBlocksRegistry.ORANGE_TERRACOTTA_SLAB.getKey(),
@@ -37,7 +37,7 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
                 ModBlocksRegistry.YELLOW_TERRACOTTA_SLAB.getKey()
         );
 
-        this.getOrCreateTagBuilder(ModBlockTags.DIRT_SLABS).add(
+        this.builder(ModBlockTags.DIRT_SLABS).add(
                 ModBlocksRegistry.DIRT_SLAB.getKey(),
                 ModBlocksRegistry.GRASS_SLAB.getKey(),
                 ModBlocksRegistry.MUD_SLAB.getKey(),
@@ -47,7 +47,7 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
                 ModBlocksRegistry.ROOTED_DIRT_SLAB.getKey(),
                 ModBlocksRegistry.MOSS_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.SLABS)
+        this.builder(BlockTags.SLABS)
                 .add(ModBlocksRegistry.DIRT_SLAB.getKey())
                 .add(ModBlocksRegistry.MUD_SLAB.getKey())
                 .add(ModBlocksRegistry.COARSE_SLAB.getKey())
@@ -106,7 +106,7 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
                 .add(ModBlocksRegistry.CUSTOM_BLACKSTONE_SLAB.getKey())
                 .add(ModBlocksRegistry.ENDSTONE_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_SHOVEL)
+        this.builder(BlockTags.MINEABLE_WITH_SHOVEL)
                 .add(ModBlocksRegistry.DIRT_SLAB.getKey())
                 .add(ModBlocksRegistry.MUD_SLAB.getKey())
                 .add(ModBlocksRegistry.COARSE_SLAB.getKey())
@@ -126,7 +126,7 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
                 //terralith
                 .add(ModBlocksRegistry.ROOTED_DIRT_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
+        this.builder(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(ModBlocksRegistry.PACKED_ICE_SLAB.getKey())
                 .add(ModBlocksRegistry.DEEPSLATE_SLAB.getKey())
                 .add(ModBlocksRegistry.TERRACOTTA_SLAB.getKey())
@@ -164,41 +164,41 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
                 .add(ModBlocksRegistry.BASALT_SLAB.getKey())
                 .add(ModBlocksRegistry.ENDSTONE_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_HOE)
+        this.builder(BlockTags.MINEABLE_WITH_HOE)
                 .add(ModBlocksRegistry.MOSS_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.SMELTS_TO_GLASS).add(
+        this.builder(BlockTags.SMELTS_TO_GLASS).add(
                 ModBlocksRegistry.SAND_SLAB.getKey(),
                 ModBlocksRegistry.RED_SAND_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.PARROTS_SPAWNABLE_ON)
+        this.builder(BlockTags.PARROTS_SPAWNABLE_ON)
                 .add(ModBlocksRegistry.GRASS_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.ANIMALS_SPAWNABLE_ON)
+        this.builder(BlockTags.ANIMALS_SPAWNABLE_ON)
                 .add(ModBlocksRegistry.GRASS_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.VALID_SPAWN).add(
+        this.builder(BlockTags.VALID_SPAWN).add(
                 ModBlocksRegistry.GRASS_SLAB.getKey(),
                 ModBlocksRegistry.PODZOL_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.AXOLOTLS_SPAWNABLE_ON)
+        this.builder(BlockTags.AXOLOTLS_SPAWNABLE_ON)
                 .add(ModBlocksRegistry.CLAY_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.RABBITS_SPAWNABLE_ON).add(
+        this.builder(BlockTags.RABBITS_SPAWNABLE_ON).add(
                 ModBlocksRegistry.GRASS_SLAB.getKey(),
                 ModBlocksRegistry.SNOW_SLAB.getKey(),
                 ModBlocksRegistry.SAND_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.GOATS_SPAWNABLE_ON).add(
+        this.builder(BlockTags.GOATS_SPAWNABLE_ON).add(
                 ModBlocksRegistry.CUSTOM_STONE_SLAB.getKey(),
                 ModBlocksRegistry.SNOW_SLAB.getKey(),
                 ModBlocksRegistry.PACKED_ICE_SLAB.getKey(),
                 ModBlocksRegistry.GRAVEL_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.SNOW)
+        this.builder(BlockTags.SNOW)
                 .add(ModBlocksRegistry.SNOW_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.SCULK_REPLACEABLE)
+        this.builder(BlockTags.SCULK_REPLACEABLE)
                 .add(ModBlocksRegistry.CUSTOM_STONE_SLAB.getKey())
                 .add(ModBlocksRegistry.DIRT_SLAB.getKey())
                 .add(ModBlocksRegistry.TERRACOTTA_SLAB.getKey())
@@ -209,7 +209,7 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
                 .add(ModBlocksRegistry.CUSTOM_SANDSTONE_SLAB.getKey());
 
 
-        this.getOrCreateTagBuilder(BlockTags.AZALEA_ROOT_REPLACEABLE)
+        this.builder(BlockTags.AZALEA_ROOT_REPLACEABLE)
                 .add(ModBlocksRegistry.CUSTOM_STONE_SLAB.getKey())
                 .add(ModBlocksRegistry.DIRT_SLAB.getKey())
                 .add(ModBlocksRegistry.TERRACOTTA_SLAB.getKey())
@@ -219,7 +219,7 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
                 .add(ModBlocksRegistry.SAND_SLAB.getKey())
                 .add(ModBlocksRegistry.SNOW_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.SNIFFER_DIGGABLE_BLOCK).add(
+        this.builder(BlockTags.SNIFFER_DIGGABLE_BLOCK).add(
                 ModBlocksRegistry.DIRT_SLAB.getKey(),
                 ModBlocksRegistry.GRASS_SLAB.getKey(),
                 ModBlocksRegistry.PODZOL_SLAB.getKey(),
@@ -227,45 +227,45 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
                 ModBlocksRegistry.MOSS_SLAB.getKey(),
                 ModBlocksRegistry.MUD_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.WOLVES_SPAWNABLE_ON).add(
+        this.builder(BlockTags.WOLVES_SPAWNABLE_ON).add(
                 ModBlocksRegistry.GRASS_SLAB.getKey(),
                 ModBlocksRegistry.SNOW_SLAB.getKey(),
                 ModBlocksRegistry.COARSE_SLAB.getKey(),
                 ModBlocksRegistry.PODZOL_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.FOXES_SPAWNABLE_ON).add(
+        this.builder(BlockTags.FOXES_SPAWNABLE_ON).add(
                 ModBlocksRegistry.GRASS_SLAB.getKey(),
                 ModBlocksRegistry.SNOW_SLAB.getKey(),
                 ModBlocksRegistry.PODZOL_SLAB.getKey(),
                 ModBlocksRegistry.COARSE_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.MANGROVE_LOGS_CAN_GROW_THROUGH)
+        this.builder(BlockTags.MANGROVE_LOGS_CAN_GROW_THROUGH)
                 .add(ModBlocksRegistry.MUD_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.MANGROVE_ROOTS_CAN_GROW_THROUGH)
+        this.builder(BlockTags.MANGROVE_ROOTS_CAN_GROW_THROUGH)
                 .add(ModBlocksRegistry.MUD_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.FROGS_SPAWNABLE_ON).add(
+        this.builder(BlockTags.FROGS_SPAWNABLE_ON).add(
                 ModBlocksRegistry.GRASS_SLAB.getKey(),
                 ModBlocksRegistry.MUD_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.SOUL_SPEED_BLOCKS).add(
+        this.builder(BlockTags.SOUL_SPEED_BLOCKS).add(
                 ModBlocksRegistry.SOUL_SAND_SLAB.getKey(),
                 ModBlocksRegistry.SOUL_SOIL_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.INFINIBURN_OVERWORLD).add(
+        this.builder(BlockTags.INFINIBURN_OVERWORLD).add(
                 ModBlocksRegistry.NETHERRACK_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.MUSHROOM_GROW_BLOCK).add(
+        this.builder(BlockTags.MUSHROOM_GROW_BLOCK).add(
                 ModBlocksRegistry.MYCELIUM_SLAB.getKey(),
                 ModBlocksRegistry.PODZOL_SLAB.getKey(),
                 ModBlocksRegistry.CRIMSON_NYLIUM_SLAB.getKey(),
                 ModBlocksRegistry.WARPED_NYLIUM_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.DRAGON_IMMUNE).add(
+        this.builder(BlockTags.DRAGON_IMMUNE).add(
                 ModBlocksRegistry.ENDSTONE_SLAB.getKey());
 
-        this.getOrCreateTagBuilder(BlockTags.NYLIUM).add(
+        this.builder(BlockTags.NYLIUM).add(
                 ModBlocksRegistry.CRIMSON_NYLIUM_SLAB.getKey(),
                 ModBlocksRegistry.WARPED_NYLIUM_SLAB.getKey());
     }

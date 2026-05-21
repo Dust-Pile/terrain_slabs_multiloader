@@ -2,14 +2,15 @@ package net.countered.datagen;
 
 
 import net.countered.terrainslabs.registries.ModBlocksRegistry;
+import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-import net.minecraft.data.models.BlockModelGenerators;
-import net.minecraft.data.models.ItemModelGenerators;
-import net.minecraft.data.models.model.ModelLocationUtils;
-import net.minecraft.data.models.model.ModelTemplates;
-import net.minecraft.data.models.model.TextureMapping;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.MultiVariant;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
+import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -24,24 +25,34 @@ public class ModModelProvider extends FabricModelProvider {
     }
 
     @Override
-    public void generateBlockStateModels(BlockModelGenerators generator) {
+    public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
         Map<Block, Block> slabs = new HashMap<>();
         fillSlabMap(slabs);
 
         slabs.forEach((base, slab) -> {
             TextureMapping textureMapping = TextureMapping.cube(base);
 
-            ResourceLocation bottomModel = ModelTemplates.SLAB_BOTTOM.create(slab, textureMapping, generator.modelOutput);
-            ResourceLocation topModel = ModelTemplates.SLAB_TOP.create(slab, textureMapping, generator.modelOutput);
+            Identifier bottomId = ModelTemplates.SLAB_BOTTOM.create(
+                    slab, textureMapping, blockStateModelGenerator.modelOutput);
+            Identifier topId = ModelTemplates.SLAB_TOP.create(
+                    slab, textureMapping, blockStateModelGenerator.modelOutput);
+            Identifier fullBlockId = ModelLocationUtils.getModelLocation(base);
 
-            ResourceLocation fullBlockModel = ModelLocationUtils.getModelLocation(base);
+            MultiVariant bottomModel  = BlockModelGenerators.plainVariant(bottomId);
+            MultiVariant topModel     = BlockModelGenerators.plainVariant(topId);
+            MultiVariant fullBlockModel = BlockModelGenerators.plainVariant(fullBlockId);
 
-            generator.blockStateOutput.accept(
+            blockStateModelGenerator.blockStateOutput.accept(
                     BlockModelGenerators.createSlab(slab, bottomModel, topModel, fullBlockModel)
             );
 
-            generator.delegateItemModel(slab, bottomModel);
+            blockStateModelGenerator.registerSimpleItemModel(slab, bottomId);
         });
+    }
+
+    @Override
+    public void generateItemModels(ItemModelGenerators itemModelGenerator) {
+
     }
 
     private void fillSlabMap(Map<Block, Block> map) {
@@ -84,11 +95,5 @@ public class ModModelProvider extends FabricModelProvider {
         map.put(Blocks.NETHERRACK, ModBlocksRegistry.NETHERRACK_SLAB.get());
         map.put(Blocks.BLACKSTONE, ModBlocksRegistry.CUSTOM_BLACKSTONE_SLAB.get());
         map.put(Blocks.END_STONE, ModBlocksRegistry.ENDSTONE_SLAB.get());
-    }
-
-
-    @Override
-    public void generateItemModels(ItemModelGenerators itemModelGenerator) {
-
     }
 }

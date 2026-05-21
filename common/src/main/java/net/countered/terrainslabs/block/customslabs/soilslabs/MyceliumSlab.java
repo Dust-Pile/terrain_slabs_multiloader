@@ -1,7 +1,7 @@
 package net.countered.terrainslabs.block.customslabs.soilslabs;
 
-import net.countered.terrainslabs.registries.ModBlocksRegistry;
 import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
+import net.countered.terrainslabs.registries.ModBlocksRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -11,8 +11,8 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowLayerBlock;
@@ -31,6 +31,7 @@ public class MyceliumSlab extends CustomSlab {
     static {
         SNOWY = BlockStateProperties.SNOWY;
     }
+
     public MyceliumSlab(BlockBehaviour.Properties properties) {
         super(properties);
         this.registerDefaultState(this.defaultBlockState()
@@ -40,14 +41,15 @@ public class MyceliumSlab extends CustomSlab {
                 .setValue(GENERATED, false));
     }
 
+
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess scheduledTickAccess, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
         if (direction == Direction.UP) {
             state = state.setValue(SNOWY, isSnow(neighborState));
         }
 
         if (state.getValue(WATERLOGGED)) {
-            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+            scheduledTickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
 
         return state;
@@ -89,8 +91,8 @@ public class MyceliumSlab extends CustomSlab {
         } else if (blockState.getFluidState().getAmount() == 8) {
             return false;
         } else {
-            int i = LightEngine.getLightBlockInto(levelReader, Blocks.GRASS_BLOCK.defaultBlockState(), pos, blockState, blockPos, Direction.UP, blockState.getLightBlock(levelReader, blockPos));
-            return i < levelReader.getMaxLightLevel();
+            int i = LightEngine.getLightBlockInto(state, Blocks.GRASS_BLOCK.defaultBlockState(), Direction.UP, blockState.getLightBlock());
+            return i < 15;
         }
     }
 

@@ -54,7 +54,7 @@ public class MudSlab extends CustomSlab {
     }
 
     @Override
-    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+    protected VoxelShape getOcclusionShape(BlockState state) {
         SlabType slabType = state.getValue(TYPE);
         switch (slabType) {
             case DOUBLE:

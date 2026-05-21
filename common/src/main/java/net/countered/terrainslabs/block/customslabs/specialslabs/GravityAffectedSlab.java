@@ -11,9 +11,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Fallable;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -44,17 +42,26 @@ public class GravityAffectedSlab extends CustomSlab implements Fallable {
     }
 
     @Override
-    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (isFree(level.getBlockState(pos.below())) && pos.getY() >= level.getMinBuildHeight()) {
-            FallingBlockEntity fallingBlockEntity = FallingBlockEntity.fall(level, pos, state);
-            this.falling(fallingBlockEntity);
+    protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        if (isFree(level.getBlockState(pos.below())) && pos.getY() >= level.getMinY()) {
+            FallingBlockEntity fallingblockentity = FallingBlockEntity.fall(level, pos, state);
+            this.falling(fallingblockentity);
         }
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-        level.scheduleTick(pos, this, this.getDelayAfterPlace());
-        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+    protected BlockState updateShape(
+            BlockState state,
+            LevelReader level,
+            ScheduledTickAccess scheduledTickAccess,
+            BlockPos pos,
+            Direction direction,
+            BlockPos neighborPos,
+            BlockState neighborState,
+            RandomSource random
+    ) {
+        scheduledTickAccess.scheduleTick(pos, this, this.getDelayAfterPlace());
+        return super.updateShape(state, level, scheduledTickAccess, pos, direction, neighborPos, neighborState, random);
     }
 
     protected void falling(FallingBlockEntity entity) {
