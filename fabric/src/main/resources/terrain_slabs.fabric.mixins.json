@@ -5,12 +5,14 @@
   "minVersion": "0.8",
   "plugin": "net.countered.terrainslabs.fabric.mixin.compat.MixinPlugin",
   "client": [
+
+    //    "MixinAoCalculator",
     "MixinAoCalculator"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "compat.MixinSodiumBlockRenderer"
+    //    "compat.MixinSodiumBlockRenderer"
   ]
 }

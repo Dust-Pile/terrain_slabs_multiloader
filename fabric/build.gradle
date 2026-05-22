@@ -76,7 +76,7 @@ dependencies {
     // Midnightlib
     modImplementation include ("eu.midnightdust:midnightlib:${project.midnightlib_version_fabric}")
 
-    modCompileOnly("maven.modrinth:sodium:mc1.21.1-0.6.13-fabric")
+   // runtimeOnly("maven.modrinth:sodium:mc1.21.10-0.7.3-neoforge")
 }
 
 processResources {
