@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(SeagrassBlock.class)
-public class MixinSeagrassBlock {
+public class SeagrassBlockMixin {
 
     /**
      * Allows Seagrass to generate and be placed on slabs

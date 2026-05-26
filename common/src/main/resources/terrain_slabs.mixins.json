@@ -9,8 +9,10 @@
     "feature.MixinDiskFeature",
     "feature.MixinOreFeature",
     "feature.WorldGenRegionMixin",
-    "ontop.place.MixinSeagrassBlock",
-    "ontop.place.MixinVegetationBlock",
+    "ontop.place.SaplingBlockMixin",
+    "ontop.place.SeagrassBlockMixin",
+    "ontop.place.SnowLayerMixin",
+    "ontop.place.VegetationBlockMixin",
     "ontop.render.MixinBlockStateBase",
     "ontop.render.target.MixinRaytrace",
     "shovel.ShovelItemAccessor"

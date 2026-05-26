@@ -7,7 +7,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -57,23 +56,6 @@ public abstract class MixinBlockStateBase {
         VoxelShape currentShape = cir.getReturnValue();
         if (currentShape.min(Direction.Axis.Y) >= 0) {
             cir.setReturnValue(currentShape.move(0, -0.5, 0));
-        }
-    }
-
-    /**
-     * Method for allowing on top blocks to survive on slabs
-     */
-    @Inject(method = "canSurvive", at = @At("RETURN"), cancellable = true)
-    private void canSurvive(
-            LevelReader level,
-            BlockPos pos,
-            CallbackInfoReturnable<Boolean> cir
-    ) {
-        BlockState state = (BlockState) (Object) this;
-        BlockState belowState = level.getBlockState(pos.below());
-
-        if (belowState.is(BlockTags.SLABS) && MixinHelper.terrain_slabs$isStateValidOnTop(state)) {
-            cir.setReturnValue(true);
         }
     }
 }
