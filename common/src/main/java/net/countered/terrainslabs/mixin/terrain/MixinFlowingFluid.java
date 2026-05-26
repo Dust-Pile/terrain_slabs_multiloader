@@ -61,7 +61,7 @@ public abstract class MixinFlowingFluid {
         if ( !blockState.getProperties().contains( GENERATED ) || !blockState.getValue( GENERATED ) ) {
             return;
         }
-        if ( direction == Direction.DOWN || fluidState.getAmount() >= 4 ) {
+        if ( direction == Direction.DOWN || fluidState.getAmount() >= 6 ) {
             level.destroyBlock( pos, false );
             level.setBlock( pos, fluidState.createLegacyBlock(), Block.UPDATE_ALL );
             ci.cancel();
