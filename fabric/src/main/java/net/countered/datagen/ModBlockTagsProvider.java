@@ -18,7 +18,6 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider arg) {
-        this.builder(BlockTags.SNOW_LAYER_CAN_SURVIVE_ON).addTag(BlockTags.SLABS);
 
         this.builder(ModBlockTags.ON_TOP_BLOCKS).add(Blocks.SNOW.builtInRegistryHolder().key());
 
@@ -46,6 +45,13 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
                 ModBlocksRegistry.PODZOL_SLAB.getKey(),
                 ModBlocksRegistry.ROOTED_DIRT_SLAB.getKey(),
                 ModBlocksRegistry.MOSS_SLAB.getKey());
+
+        this.builder(BlockTags.SNOW_LAYER_CAN_SURVIVE_ON).addTag(BlockTags.SLABS);
+
+        this.builder(BlockTags.SNOW_LAYER_CANNOT_SURVIVE_ON).add(
+                Blocks.ICE.builtInRegistryHolder().key(),
+                Blocks.PACKED_ICE.builtInRegistryHolder().key()
+        );
 
         this.builder(BlockTags.SLABS)
                 .add(ModBlocksRegistry.DIRT_SLAB.getKey())
