@@ -9,12 +9,10 @@
     "feature.MixinDiskFeature",
     "feature.MixinOreFeature",
     "feature.WorldGenRegionMixin",
-//    "ontop.place.MixinBushBlock",
     "ontop.place.MixinSeagrassBlock",
-    "ontop.place.MixinSnowLayer",
-//    "ontop.render.MixinBlockStateBase",
-//    "ontop.render.target.MixinRaytrace",
-//    "shovel.MixinShovelItem",
+    "ontop.place.MixinVegetationBlock",
+    "ontop.render.MixinBlockStateBase",
+    "ontop.render.target.MixinRaytrace",
     "shovel.ShovelItemAccessor"
   ],
   "injectors": {
