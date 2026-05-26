@@ -1,5 +1,6 @@
 package net.countered.terrainslabs.model;
 
+import net.countered.terrainslabs.util.MixinHelper;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableMesh;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
@@ -10,8 +11,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import org.jspecify.annotations.Nullable;
 
@@ -35,9 +38,14 @@ public class SlabOffsetModel implements BlockStateModel {
             RandomSource random,
             Predicate<@Nullable Direction> cullTest
     ) {
-        boolean slabBelow = isOnSlab(blockView, pos);
+        if (!MixinHelper.terrain_slabs$isStateValidOnTop(state)) return;
 
-        if (!slabBelow && !hasSlabNeighbor(blockView, pos)) {
+        boolean slabBelow = isPosSlab(blockView, pos.below());
+        boolean isAboveShifted = isAboveShifted(blockView, state, pos);
+
+        boolean shouldShift = isAboveShifted || slabBelow;
+
+        if (!shouldShift && !hasSlabNeighbor(blockView, pos)) {
             wrapped.emitQuads(emitter, blockView, pos, state, random, cullTest);
             return;
         }
@@ -49,19 +57,19 @@ public class SlabOffsetModel implements BlockStateModel {
             Direction face = quad.cullFace();
 
             boolean neighborOnSlab = face != null && isNeighborOnSlab(blockView, pos, face);
-            if (!slabBelow && !neighborOnSlab && face != null && cullTest.test(face)) {
+            if (!shouldShift && !neighborOnSlab && face != null && cullTest.test(face)) {
                 return;
             }
 
             emitter.copyFrom(quad);
 
-            if (slabBelow) {
+            if (shouldShift) {
                 for (int i = 0; i < 4; i++) {
                     emitter.pos(i, quad.x(i), quad.y(i) - 0.5f, quad.z(i));
                 }
             }
 
-            if (slabBelow || neighborOnSlab) {
+            if (shouldShift || neighborOnSlab) {
                 emitter.cullFace(null);
             }
 
@@ -69,10 +77,17 @@ public class SlabOffsetModel implements BlockStateModel {
         });
     }
 
-    private boolean isOnSlab(BlockAndTintGetter blockView, BlockPos pos) {
-        BlockState below = blockView.getBlockState(pos.below());
-        return below.getBlock() instanceof SlabBlock
-                && below.getValue(SlabBlock.TYPE) == SlabType.BOTTOM;
+    private boolean isAboveShifted(BlockAndTintGetter blockView, BlockState state, BlockPos pos) {
+        if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER) {
+            return isPosSlab(blockView, pos.below(2));
+        }
+        return false;
+    }
+
+    private boolean isPosSlab(BlockAndTintGetter blockView, BlockPos pos) {
+        BlockState state = blockView.getBlockState(pos);
+        return state.getBlock() instanceof SlabBlock
+                && state.getValue(SlabBlock.TYPE) == SlabType.BOTTOM;
     }
 
     private boolean isNeighborOnSlab(BlockAndTintGetter blockView, BlockPos pos, Direction dir) {

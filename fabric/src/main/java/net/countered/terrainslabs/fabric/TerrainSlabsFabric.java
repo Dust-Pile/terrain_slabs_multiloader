@@ -8,7 +8,6 @@ import net.countered.terrainslabs.platform.fabric.PlatformConfigHooksImpl;
 import net.countered.terrainslabs.registries.FlattenableBlockRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
 
 public final class TerrainSlabsFabric implements ModInitializer {
     @Override
@@ -21,21 +20,7 @@ public final class TerrainSlabsFabric implements ModInitializer {
 
         FlattenableBlockRegistry.apply();
         ModelLoadingPlugin.register(context -> {
-
-            context.modifyBlockModelAfterBake().register(
-                    (state, context1) -> {
-
-                        if (shouldWrap(state)) {
-                            return new SlabOffsetModel(state);
-                        }
-
-                        return state;
-                    }
-            );
+            context.modifyBlockModelAfterBake().register((state, context1) -> new SlabOffsetModel(state));
         });
-    }
-
-    private boolean shouldWrap(BlockStateModel state) {
-        return true;
     }
 }

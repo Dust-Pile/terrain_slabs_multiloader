@@ -21,10 +21,11 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
 
         this.builder(ModBlockTags.ON_TOP_BLOCKS).add(Blocks.SNOW.builtInRegistryHolder().key());
 
-//        TODO this.builder(BlockTags.DEAD_BUSH_MAY_PLACE_ON)
-//                .addTag(ModBlockTags.DIRT_SLABS)
-//                .add(ModBlocksRegistry.SAND_SLAB.getKey(), ModBlocksRegistry.RED_SAND_SLAB.getKey())
-//                .addTag(ModBlockTags.TERRACOTTA_SLABS);
+        this.builder(BlockTags.DRY_VEGETATION_MAY_PLACE_ON)
+                .add(ModBlocksRegistry.SAND_SLAB.getKey())
+                .add(ModBlocksRegistry.RED_SAND_SLAB.getKey())
+                .addTag(ModBlockTags.TERRACOTTA_SLABS)
+                .addTag(ModBlockTags.DIRT_SLABS);
 
         this.builder(ModBlockTags.TERRACOTTA_SLABS).add(
                 ModBlocksRegistry.TERRACOTTA_SLAB.getKey(),
