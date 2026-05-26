@@ -38,20 +38,18 @@ public class SlabOffsetModel implements BlockStateModel {
             RandomSource random,
             Predicate<@Nullable Direction> cullTest
     ) {
-        if (!MixinHelper.terrain_slabs$isStateValidOnTop(state)) return;
-
         boolean slabBelow = isPosSlab(blockView, pos.below());
         boolean isAboveShifted = isAboveShifted(blockView, state, pos);
 
         boolean shouldShift = isAboveShifted || slabBelow;
 
-        if (!shouldShift && !hasSlabNeighbor(blockView, pos)) {
+        if ((!shouldShift && !hasSlabNeighbor(blockView, pos)) || !MixinHelper.terrain_slabs$isStateValidOnTop(state)) {
             wrapped.emitQuads(emitter, blockView, pos, state, random, cullTest);
             return;
         }
         MutableMesh mesh = Renderer.get().mutableMesh();
 
-        wrapped.emitQuads(mesh.emitter(), blockView, pos.above(), state, random, dir -> false);
+        wrapped.emitQuads(mesh.emitter(), blockView, pos, state, random, dir -> false);
 
         mesh.forEach(quad -> {
             Direction face = quad.cullFace();
@@ -86,8 +84,7 @@ public class SlabOffsetModel implements BlockStateModel {
 
     private boolean isPosSlab(BlockAndTintGetter blockView, BlockPos pos) {
         BlockState state = blockView.getBlockState(pos);
-        return state.getBlock() instanceof SlabBlock
-                && state.getValue(SlabBlock.TYPE) == SlabType.BOTTOM;
+        return state.getBlock() instanceof SlabBlock && state.getValue(SlabBlock.TYPE) == SlabType.BOTTOM;
     }
 
     private boolean isNeighborOnSlab(BlockAndTintGetter blockView, BlockPos pos, Direction dir) {

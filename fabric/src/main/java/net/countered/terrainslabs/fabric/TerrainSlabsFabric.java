@@ -17,8 +17,8 @@ public final class TerrainSlabsFabric implements ModInitializer {
 
         ModAddedFeatures.registerFeatures();
         MidnightConfig.init(TerrainSlabs.MOD_ID, PlatformConfigHooksImpl.class);
-
         FlattenableBlockRegistry.apply();
+
         ModelLoadingPlugin.register(context -> {
             context.modifyBlockModelAfterBake().register((state, context1) -> new SlabOffsetModel(state));
         });
