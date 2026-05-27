@@ -1,6 +1,6 @@
 package net.countered.terrainslabs.model;
 
-import net.countered.terrainslabs.util.MixinHelper;
+import net.countered.terrainslabs.util.OnTopHelper;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableMesh;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
@@ -43,7 +43,7 @@ public class SlabOffsetModel implements BlockStateModel {
 
         boolean shouldShift = isAboveShifted || slabBelow;
 
-        if ((!shouldShift && !hasSlabNeighbor(blockView, pos)) || !MixinHelper.terrain_slabs$isStateValidOnTop(state)) {
+        if ((!shouldShift && !hasSlabNeighbor(blockView, pos)) || !OnTopHelper.terrain_slabs$isStateValidOnTop(state)) {
             wrapped.emitQuads(emitter, blockView, pos, state, random, cullTest);
             return;
         }

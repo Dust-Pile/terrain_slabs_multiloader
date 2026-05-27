@@ -2,7 +2,7 @@ package net.countered.terrainslabs.mixin.ontop.place;
 
 import net.countered.terrainslabs.block.ModBlockTags;
 import net.countered.terrainslabs.platform.PlatformConfigHooks;
-import net.countered.terrainslabs.util.MixinHelper;
+import net.countered.terrainslabs.util.OnTopHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
@@ -26,7 +26,7 @@ public abstract class VegetationBlockMixin {
      */
     @Inject(method = "canSurvive", at = @At("RETURN"), cancellable = true)
     private void canSurvive(BlockState state, LevelReader level, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        if (MixinHelper.terrain_slabs$isStateValidOnTop(state) && PlatformConfigHooks.isVegetationOnSlabsEnabled() && mayPlaceOn(state, level, pos.below())) {
+        if (OnTopHelper.terrain_slabs$isStateValidOnTop(state) && PlatformConfigHooks.isVegetationOnSlabsEnabled() && mayPlaceOn(state, level, pos.below())) {
             cir.setReturnValue(true);
         }
     }

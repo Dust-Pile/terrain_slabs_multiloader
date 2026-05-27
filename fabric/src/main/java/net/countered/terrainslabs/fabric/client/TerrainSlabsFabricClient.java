@@ -19,10 +19,8 @@ import net.minecraft.world.level.block.Blocks;
 public final class TerrainSlabsFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        // This entrypoint is suitable for setting up client-specific logic, such as rendering.
         registerRenderLayers();
         registerBlockColorProviders();
-        // TODO registerItemColorProviders();
         registerBuiltinResourcePacks();
     }
 
@@ -40,13 +38,6 @@ public final class TerrainSlabsFabricClient implements ClientModInitializer {
                 ModBlocksRegistry.GRASS_SLAB.get()
         );
     }
-//TODO
-//    private void registerItemColorProviders() {
-//        ColorProviderRegistry.ITEM.register((stack, tintIndex) ->
-//                        Minecraft.getInstance().getBlockColors().getColor(Blocks.GRASS_BLOCK.defaultBlockState(), null, null, tintIndex),
-//                ModBlocksRegistry.GRASS_SLAB.get()
-//        );
-//    }
 
     private void registerBuiltinResourcePacks() {
         ModContainer mod = FabricLoader.getInstance().getModContainer(TerrainSlabs.MOD_ID).orElseThrow();

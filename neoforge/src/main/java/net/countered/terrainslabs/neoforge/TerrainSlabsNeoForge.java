@@ -8,7 +8,7 @@ import net.countered.terrainslabs.neoforge.feature.ModFeatures;
 import net.countered.terrainslabs.neoforge.model.SlabOffsetModel;
 import net.countered.terrainslabs.platform.neoforge.PlatformConfigHooksImpl;
 import net.countered.terrainslabs.registries.ModFlattenablesRegistry;
-import net.countered.terrainslabs.util.MixinHelper;
+import net.countered.terrainslabs.util.OnTopHelper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -52,7 +52,7 @@ public final class TerrainSlabsNeoForge {
 
         for (var entry : models.entrySet()) {
             BlockState state = entry.getKey();
-            if (MixinHelper.terrain_slabs$isStateValidOnTop(state)) {
+            if (OnTopHelper.terrain_slabs$isStateValidOnTop(state)) {
                 models.put(state, new SlabOffsetModel(entry.getValue()));
             }
         }

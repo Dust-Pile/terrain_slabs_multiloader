@@ -1,6 +1,6 @@
 package net.countered.terrainslabs.neoforge.model;
 
-import net.countered.terrainslabs.util.MixinHelper;
+import net.countered.terrainslabs.util.OnTopHelper;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
@@ -40,7 +40,7 @@ public class SlabOffsetModel implements BlockStateModel {
         boolean isAboveShifted = isAboveShifted(level, state, pos);
         boolean shouldShift = isAboveShifted || slabBelow;
 
-        if ((!shouldShift && !hasSlabNeighbor(level, pos)) || !MixinHelper.terrain_slabs$isStateValidOnTop(state)) {
+        if ((!shouldShift && !hasSlabNeighbor(level, pos)) || !OnTopHelper.terrain_slabs$isStateValidOnTop(state)) {
             wrapped.collectParts(level, pos, state, random, parts);
             return;
         }

@@ -20,11 +20,6 @@ public class PlatformConfigHooks {
     }
 
     @ExpectPlatform
-    public static float getAoStrength() {
-        throw new AssertionError();
-    }
-
-    @ExpectPlatform
     public static int getSlabRunLength() {
         throw new AssertionError();
     }

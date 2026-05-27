@@ -1,12 +1,11 @@
 package net.countered.terrainslabs.mixin.ontop.render;
 
-import net.countered.terrainslabs.util.MixinHelper;
+import net.countered.terrainslabs.util.OnTopHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.EmptyBlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -16,16 +15,12 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockBehaviour.BlockStateBase.class)
 public abstract class MixinBlockStateBase {
-
-    @Shadow
-    public abstract boolean triggerEvent(Level level, BlockPos pos, int id, int param);
 
     /**
      * Mixin for shifting down the collision shape of blocks on slabs, but only if the offset wasn't already applied by the class itself
@@ -40,7 +35,7 @@ public abstract class MixinBlockStateBase {
 
         BlockState state = (BlockState) (Object) this;
 
-        if (!MixinHelper.terrain_slabs$isStateValidOnTop(state)) return;
+        if (!OnTopHelper.terrain_slabs$isStateValidOnTop(state)) return;
 
         BlockPos belowPos = pos.below();
         if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER) {
