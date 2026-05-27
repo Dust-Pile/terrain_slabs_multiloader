@@ -1,6 +1,6 @@
 {
   "values": [
-    "minecraft:ice",
-    "minecraft:packed_ice"
+    "terrain_slabs:ice_slab",
+    "terrain_slabs:packed_ice_slab"
   ]
 }

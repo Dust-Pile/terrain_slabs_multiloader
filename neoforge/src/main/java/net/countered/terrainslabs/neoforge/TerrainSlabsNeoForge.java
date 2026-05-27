@@ -7,7 +7,7 @@ import net.countered.terrainslabs.neoforge.client.TerrainSlabsNeoForgeClient;
 import net.countered.terrainslabs.neoforge.feature.ModFeatures;
 import net.countered.terrainslabs.neoforge.model.SlabOffsetModel;
 import net.countered.terrainslabs.platform.neoforge.PlatformConfigHooksImpl;
-import net.countered.terrainslabs.registries.FlattenableBlockRegistry;
+import net.countered.terrainslabs.registries.ModFlattenablesRegistry;
 import net.countered.terrainslabs.util.MixinHelper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
@@ -21,6 +21,9 @@ import net.neoforged.neoforge.event.AddPackFindersEvent;
 public final class TerrainSlabsNeoForge {
 
     public TerrainSlabsNeoForge(IEventBus modBus) {
+        // Run our common setup.
+        TerrainSlabs.init();
+
         MidnightConfig.init(TerrainSlabs.MOD_ID, PlatformConfigHooksImpl.class);
         ModFeatures.FEATURES.register(modBus);
 
@@ -28,13 +31,10 @@ public final class TerrainSlabsNeoForge {
         modBus.addListener(this::setupClient);
         modBus.addListener(this::setupPack);
         modBus.addListener(this::onModifyBakingResult);
-
-        // Run our common setup.
-        TerrainSlabs.init();
     }
 
     private void setupServer(FMLCommonSetupEvent event) {
-        event.enqueueWork(FlattenableBlockRegistry::apply);
+        event.enqueueWork(ModFlattenablesRegistry::registerFlattenables);
     }
 
     private void setupClient(FMLClientSetupEvent event) {

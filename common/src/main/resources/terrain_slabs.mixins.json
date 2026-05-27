@@ -15,7 +15,6 @@
     "ontop.place.VegetationBlockMixin",
     "ontop.render.MixinBlockStateBase",
     "ontop.render.target.MixinRaytrace",
-    "shovel.ShovelItemAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

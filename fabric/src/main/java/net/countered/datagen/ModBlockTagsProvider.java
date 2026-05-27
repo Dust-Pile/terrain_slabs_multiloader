@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.Blocks;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -18,9 +17,6 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider arg) {
-
-        this.builder(ModBlockTags.ON_TOP_BLOCKS).add(Blocks.SNOW.builtInRegistryHolder().key());
-
 
         this.builder(ModBlockTags.TERRACOTTA_SLABS).add(
                 ModBlocksRegistry.TERRACOTTA_SLAB.getKey(),
@@ -75,8 +71,8 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
         this.builder(BlockTags.SNOW_LAYER_CAN_SURVIVE_ON).addTag(BlockTags.SLABS);
 
         this.builder(BlockTags.SNOW_LAYER_CANNOT_SURVIVE_ON).add(
-                Blocks.ICE.builtInRegistryHolder().key(),
-                Blocks.PACKED_ICE.builtInRegistryHolder().key()
+                ModBlocksRegistry.ICE_SLAB.getKey(),
+                ModBlocksRegistry.PACKED_ICE_SLAB.getKey()
         );
 
         this.builder(BlockTags.CONVERTABLE_TO_MUD)
