@@ -2,15 +2,13 @@ package net.countered.terrainslabs.generation;
 
 import com.mojang.serialization.Codec;
 import net.countered.platform.PlatformConfigHooks;
+import net.countered.terrainslabs.TerrainSlabs;
 import net.countered.terrainslabs.block.ModSlabsMap;
 import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
 import net.countered.terrainslabs.registries.ModBlocksRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.EmptyBlockGetter;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoublePlantBlock;
@@ -19,12 +17,14 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.SlabType;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import java.util.Objects;
+import java.util.*;
 
 public class SlabFeature extends Feature<NoneFeatureConfiguration> {
 
@@ -45,6 +45,8 @@ public class SlabFeature extends Feature<NoneFeatureConfiguration> {
 
     private void generateSlabs(WorldGenLevel level, BlockPos origin) {
         ChunkPos chunkPos = new ChunkPos(origin);
+        level.getChunk( chunkPos.x, chunkPos.z );
+
         int minY = level.getMinBuildHeight();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
@@ -232,6 +234,62 @@ public class SlabFeature extends Feature<NoneFeatureConfiguration> {
 
     private void setBlockState(LevelAccessor world, BlockPos pos, BlockState state) {
         world.setBlock(pos, state, 3);
+    }
+
+    public static class BlockPosCache {
+
+        // Should not be a memory leak... should not be...
+        private static int warningSize = 100;
+        final protected static Map<ChunkAccess, Stack<BlockPos>> PLACED_SLABS = new HashMap<>();
+
+        public static Optional<Stack<BlockPos>> getChunk(ChunkAccess chunk ) {
+            if ( PLACED_SLABS.containsKey( chunk ) ) {
+                return Optional.of( PLACED_SLABS.get( chunk ) );
+            }
+
+            return Optional.empty();
+        }
+
+        public static Optional<Stack<BlockPos>> popChunk( ChunkAccess chunk ) {
+            Optional<Stack<BlockPos>> stackOption = getChunk( chunk );
+            PLACED_SLABS.remove( chunk );
+
+            return stackOption;
+        }
+
+        public static void mapChunk( ChunkAccess chunk ) {
+            if ( PLACED_SLABS.containsKey( chunk ) || chunk.getStatus().isOrAfter( ChunkStatus.INITIALIZE_LIGHT ) ) {
+                return;
+            }
+
+            if ( PLACED_SLABS.size() >= warningSize) {
+                defragCache();
+            }
+
+            PLACED_SLABS.put( chunk, new Stack<>() );
+        }
+
+        public static void addSlabPos( Level level, BlockPos pos ) {
+            ChunkAccess chunk = level.getChunk( pos );
+
+            if ( PLACED_SLABS.containsKey( chunk ) ) {
+                PLACED_SLABS.get( chunk ).push( pos );
+            } else {
+                mapChunk( chunk );
+                PLACED_SLABS.get( chunk ).push( pos );
+            }
+        }
+
+        private static void defragCache() {
+            PLACED_SLABS.forEach( ( chunk, stack ) -> {
+                if ( chunk.getStatus().isOrAfter( ChunkStatus.INITIALIZE_LIGHT ) ) {
+                    PLACED_SLABS.remove( chunk );
+                }
+            } );
+
+            TerrainSlabs.LOGGER.warn( "Placed Slab Cache grew to size {}; trimmed to size {}.", warningSize, PLACED_SLABS.size() );
+            warningSize = Math.max( PLACED_SLABS.size() * 2, 100 );
+        }
     }
 }
 
