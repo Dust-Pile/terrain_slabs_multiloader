@@ -1,4 +1,4 @@
-package net.countered.terrainslabs.mixin.ontop.state;
+package net.countered.terrainslabs.mixin.offset.state;
 
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
 import net.minecraft.core.BlockPos;
@@ -41,14 +41,6 @@ public class MixinBlockStateBase {
             return;
         }
 
-        terrain_slabs$checkAndSwitch( level, pos );
-    }
-
-    @Inject( method = "neighborChanged", at = @At("TAIL") )
-    private void terrain_slabs$updateOffsetForNeighbor(
-            Level level, BlockPos pos, Block neighborBlock,
-            BlockPos neighborPos, boolean movedByPiston, CallbackInfo ci
-    ) {
         terrain_slabs$checkAndSwitch( level, pos );
     }
 

@@ -1,4 +1,4 @@
-package net.countered.terrainslabs.mixin.ontop.render.target;
+package net.countered.terrainslabs.mixin.offset.render.target;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

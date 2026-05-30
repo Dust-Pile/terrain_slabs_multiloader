@@ -219,8 +219,10 @@ public class SlabFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private void setBlockState(LevelAccessor world, BlockPos pos, BlockState state) {
-        if ( state.getValue( SlabBlock.TYPE ) == SlabType.BOTTOM ) {
-            TOP_SLAB_CACHE.addSlabPos( world, pos );
+        if ( state.getBlock() instanceof SlabBlock ) {
+            if ( state.getValue( SlabBlock.TYPE ) == SlabType.BOTTOM ) {
+                TOP_SLAB_CACHE.addSlabPos( world, pos );
+            }
         }
 
         world.setBlock(pos, state, 3);

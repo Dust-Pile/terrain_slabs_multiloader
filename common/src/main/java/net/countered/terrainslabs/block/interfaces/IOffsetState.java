@@ -3,9 +3,7 @@ package net.countered.terrainslabs.block.interfaces;
 import net.countered.terrainslabs.block.OffsetProperty;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 public interface IOffsetState {
@@ -16,13 +14,11 @@ public interface IOffsetState {
             return false;
         }
 
-        // TODO: implement in double plant block
-        BlockPos belowPos = pos.below();
-        if (state.getBlock() instanceof DoublePlantBlock && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER) {
-            belowPos = pos.below(2);
+        if ( state.getBlock() instanceof IConditionalOffset conditional && !conditional.couldPlaceOnTop( level, pos, state ) ) {
+            return false;
         }
 
-        BlockState belowState = level.getBlockState(belowPos);
+        BlockState belowState = level.getBlockState( pos.below() );
         return ISlabCopy.isBottomSlab( belowState ) || ( (IOffsetState) belowState ).terrain_slabs$isOffset();
     }
 

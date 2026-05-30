@@ -1,4 +1,4 @@
-package net.countered.terrainslabs.mixin.ontop.state;
+package net.countered.terrainslabs.mixin.offset.state;
 
 import net.countered.terrainslabs.block.OffsetProperty;
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
