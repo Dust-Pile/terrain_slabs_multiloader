@@ -46,26 +46,8 @@ public class SlabFeature extends Feature<NoneFeatureConfiguration> {
         return false;
     }
 
-    protected static void iterateChunkBlocks( WorldGenLevel level, BlockPos origin, BiConsumer<BlockPos, Integer> handler ) {
-        ChunkPos chunkPos = new ChunkPos(origin);
-        level.getChunk( chunkPos.x, chunkPos.z );
-
-        int minY = level.getMinBuildHeight();
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                int worldX = chunkPos.getMinBlockX() + x;
-                int worldZ = chunkPos.getMinBlockZ() + z;
-                int maxY = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, worldX, worldZ);
-                for (int y = maxY; y >= minY; y--) {
-                    BlockPos currentPos = new BlockPos(worldX, y, worldZ);
-                    handler.accept( currentPos, minY );
-                }
-            }
-        }
-    }
-
     private void generateSlabs( WorldGenLevel level, BlockPos origin ) {
-        iterateChunkBlocks( level, origin, (currentPos, maxY) -> {
+        FeatureUtil.iterateChunkBlocks( level, origin, (currentPos, maxY) -> {
             if (shouldPlaceBottomSlab(level, currentPos, currentPos.getY() == maxY-1)) {
                 placeBottomSlab(level, currentPos);
             } else if (shouldPlaceTopSlab(level, currentPos)) {
@@ -242,64 +224,8 @@ public class SlabFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private void setBlockState(LevelAccessor world, BlockPos pos, BlockState state) {
+        // BlockPosCache.addSlabPos( world, pos );
         world.setBlock(pos, state, 3);
-    }
-
-    public static class BlockPosCache {
-
-        // Should not be a memory leak... should not be...
-        final private static int INITIAL_WARNING_SIZE = 100;
-        private static int warningSize = INITIAL_WARNING_SIZE;
-        final protected static Map<ChunkAccess, Stack<BlockPos>> PLACED_SLABS = new HashMap<>();
-
-        public static Optional<Stack<BlockPos>> getChunk(ChunkAccess chunk ) {
-            if ( PLACED_SLABS.containsKey( chunk ) ) {
-                return Optional.of( PLACED_SLABS.get( chunk ) );
-            }
-
-            return Optional.empty();
-        }
-
-        public static Optional<Stack<BlockPos>> popChunk( ChunkAccess chunk ) {
-            Optional<Stack<BlockPos>> stackOption = getChunk( chunk );
-            PLACED_SLABS.remove( chunk );
-
-            return stackOption;
-        }
-
-        public static void mapChunk( ChunkAccess chunk ) {
-            if ( PLACED_SLABS.containsKey( chunk ) || chunk.getStatus().isOrAfter( ChunkStatus.INITIALIZE_LIGHT ) ) {
-                return;
-            }
-
-            if ( PLACED_SLABS.size() >= warningSize) {
-                defragCache();
-            }
-
-            PLACED_SLABS.put( chunk, new Stack<>() );
-        }
-
-        public static void addSlabPos( Level level, BlockPos pos ) {
-            ChunkAccess chunk = level.getChunk( pos );
-
-            if ( PLACED_SLABS.containsKey( chunk ) ) {
-                PLACED_SLABS.get( chunk ).push( pos );
-            } else {
-                mapChunk( chunk );
-                PLACED_SLABS.get( chunk ).push( pos );
-            }
-        }
-
-        private static void defragCache() {
-            PLACED_SLABS.forEach( ( chunk, stack ) -> {
-                if ( chunk.getStatus().isOrAfter( ChunkStatus.INITIALIZE_LIGHT ) ) {
-                    PLACED_SLABS.remove( chunk );
-                }
-            } );
-
-            TerrainSlabs.LOGGER.warn( "Placed Slab Cache grew to size {}; trimmed to size {}.", warningSize, PLACED_SLABS.size() );
-            warningSize = Math.max( PLACED_SLABS.size() * 2, INITIAL_WARNING_SIZE );
-        }
     }
 }
 

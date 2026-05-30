@@ -36,7 +36,7 @@ public final class TerrainSlabsMixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin( String targetClassName, String mixinClassName ) {
         assert CTS_CONFIGS != null;
         if ( ONTOP_VEGETATION_MIXIN_CLASSES.contains(mixinClassName) ) {
-            return !CTS_CONFIGS.enableSnowOnSlabs() && !CTS_CONFIGS.enableVegetationOnSlabs();
+            return CTS_CONFIGS.enableSnowOnSlabs() || CTS_CONFIGS.enableVegetationOnSlabs();
         } else if ( mixinClassName.equals("net.countered.terrainslabs.mixin.ontop.render.MixinBlockStateBaseOcclusion") ) {
             return CTS_CONFIGS.enableSnowOnSlabs();
         } else if ( mixinClassName.equals("net.countered.terrainslabs.mixin.terrain.MixinFlowingFluid") ) {
