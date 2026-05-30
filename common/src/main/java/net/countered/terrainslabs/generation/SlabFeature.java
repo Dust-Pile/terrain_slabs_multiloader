@@ -224,7 +224,7 @@ public class SlabFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private void setBlockState(LevelAccessor world, BlockPos pos, BlockState state) {
-        // BlockPosCache.addSlabPos( world, pos );
+        FeatureUtil.BlockPosCache.addSlabPos( world, pos );
         world.setBlock(pos, state, 3);
     }
 }

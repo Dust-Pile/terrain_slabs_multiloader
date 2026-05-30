@@ -31,7 +31,7 @@ public class OffsetFeature extends Feature<NoneFeatureConfiguration> {
         }
 
         ChunkAccess chunk = context.level().getChunk( context.origin() );
-        Optional<Stack<BlockPos>> slabs = BlockPosCache.popChunk( chunk );
+        Optional<Stack<BlockPos>> slabs = FeatureUtil.BlockPosCache.popChunk( chunk );
         if ( slabs.isPresent() ) {
             fixAllOffsetsCached( slabs.get(), context );
         } else {
