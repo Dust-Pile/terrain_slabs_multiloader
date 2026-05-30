@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
 import net.countered.terrainslabs.block.interfaces.ISlabCopy;
-import net.countered.terrainslabs.util.MixinHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -40,7 +39,7 @@ public class MixinBlockBehaviours {
             BlockState state, LevelReader level, BlockPos pos
     ) {
         BlockState stateAtOffset = original.call( instance, offPos );
-        if ( terrain_slabs$skipModify( offPos, state, pos ) || MixinHelper.notBottomSlab( stateAtOffset ) ) {
+        if ( terrain_slabs$skipModify( offPos, state, pos ) || ISlabCopy.notBottomSlab( stateAtOffset ) ) {
             return stateAtOffset;
         }
 
@@ -63,7 +62,7 @@ public class MixinBlockBehaviours {
         if (
                 direction != Direction.UP
                 || terrain_slabs$skipModify( offsetPos, state, pos )
-                || MixinHelper.notBottomSlab( level.getBlockState( offsetPos ) )
+                || ISlabCopy.notBottomSlab( level.getBlockState( offsetPos ) )
         ) {
             return origOutput;
         }

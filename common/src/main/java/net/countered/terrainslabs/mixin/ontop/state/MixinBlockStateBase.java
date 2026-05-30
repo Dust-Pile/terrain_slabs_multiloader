@@ -1,7 +1,6 @@
 package net.countered.terrainslabs.mixin.ontop.state;
 
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
-import net.countered.terrainslabs.util.MixinHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -64,7 +63,7 @@ public class MixinBlockStateBase {
     @Unique
     private void terrain_slabs$checkAndSwitch( LevelAccessor level, BlockPos pos ) {
         IOffsetState newState = (IOffsetState) level.getBlockState( pos );
-        if ( MixinHelper.shouldBeOnTopState( level, pos, (BlockState) newState ) != newState.terrain_slabs$isOffset() ) {
+        if ( IOffsetState.shouldBeOnTopState( level, pos, (BlockState) newState ) != newState.terrain_slabs$isOffset() ) {
             level.setBlock( pos, newState.terrain_slabs$getOppositeState(), Block.UPDATE_ALL );
         }
     }

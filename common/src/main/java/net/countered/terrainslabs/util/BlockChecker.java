@@ -7,7 +7,6 @@ import net.minecraft.world.level.block.Block;
 import java.util.HashSet;
 import java.util.List;
 
-@SuppressWarnings("ClassCanBeRecord") // Do not want access to set
 public class BlockChecker {
     private final HashSet<Block> set;
 

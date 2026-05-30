@@ -2,7 +2,6 @@ package net.countered.terrainslabs.generation;
 
 import com.mojang.serialization.Codec;
 import net.countered.platform.PlatformConfigHooks;
-import net.countered.terrainslabs.TerrainSlabs;
 import net.countered.terrainslabs.block.ModSlabsMap;
 import net.countered.terrainslabs.block.customslabs.specialslabs.CustomSlab;
 import net.countered.terrainslabs.registries.ModBlocksRegistry;
@@ -17,19 +16,15 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.SlabType;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.ChunkStatus;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class SlabFeature extends Feature<NoneFeatureConfiguration> {
+
+    protected static final FeatureUtil.BlockPosCache TOP_SLAB_CACHE = new FeatureUtil.BlockPosCache();
 
     public SlabFeature(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
@@ -224,7 +219,10 @@ public class SlabFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private void setBlockState(LevelAccessor world, BlockPos pos, BlockState state) {
-        FeatureUtil.BlockPosCache.addSlabPos( world, pos );
+        if ( state.getValue( SlabBlock.TYPE ) == SlabType.BOTTOM ) {
+            TOP_SLAB_CACHE.addSlabPos( world, pos );
+        }
+
         world.setBlock(pos, state, 3);
     }
 }

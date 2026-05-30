@@ -3,7 +3,6 @@ package net.countered.terrainslabs.mixin.ontop.place;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
-import net.countered.terrainslabs.util.MixinHelper;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,7 +21,7 @@ public class MixinBlockItem {
             return null;
         }
 
-        if ( MixinHelper.shouldBeOnTopState( context.getLevel(), context.getClickedPos(), state ) ) {
+        if ( IOffsetState.shouldBeOnTopState( context.getLevel(), context.getClickedPos(), state ) ) {
             return ((IOffsetState) state ).terrain_slabs$getOffsetState();
         }
 

@@ -2,6 +2,7 @@ package net.countered.terrainslabs.generation;
 
 import net.countered.terrainslabs.TerrainSlabs;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
@@ -37,26 +38,22 @@ public final class FeatureUtil {
         }
     }
 
-    public static void iterateAbove(WorldGenLevel level, BlockPos pos, int maxY, BiFunction<BlockPos, BlockState, Boolean> func) {
-        while ( pos.getY() <= maxY && func.apply( pos, level.getBlockState( pos ) ) ) {
-            pos = pos.above();
+    public static void iterateInDir(WorldGenLevel level, BlockPos pos, Direction dir, int yLimit, BiFunction<BlockPos, BlockState, Boolean> func) {
+        while ( pos.getY() != yLimit && func.apply( pos, level.getBlockState( pos ) ) ) {
+            pos = pos.relative( dir );
         }
     }
 
-    public static void iterateBelow(WorldGenLevel level, BlockPos pos, int minY, BiFunction<BlockPos, BlockState, Boolean> func) {
-        while ( pos.getY() >= minY && func.apply( pos, level.getBlockState( pos ) ) ) {
-            pos = pos.below();
-        }
-    }
-
-    protected static class BlockPosCache {
+    public static class BlockPosCache {
 
         // Should not be a memory leak... should not be...
         final private static int INITIAL_WARNING_SIZE = 100;
-        private static int warningSize = INITIAL_WARNING_SIZE;
-        final protected static Map<ChunkAccess, Stack<BlockPos>> PLACED_SLABS = new HashMap<>();
+        private int warningSize = INITIAL_WARNING_SIZE;
+        final protected Map<ChunkAccess, Stack<BlockPos>> PLACED_SLABS = new HashMap<>();
 
-        public static <L extends LevelAccessor> void addSlabPos(L level, BlockPos pos ) {
+        public BlockPosCache () {}
+
+        public <L extends LevelAccessor> void addSlabPos(L level, BlockPos pos ) {
             ChunkAccess chunk = level.getChunk( pos );
 
             if ( PLACED_SLABS.containsKey( chunk ) ) {
@@ -67,7 +64,7 @@ public final class FeatureUtil {
             }
         }
 
-        protected static Optional<Stack<BlockPos>> getChunk(ChunkAccess chunk ) {
+        protected Optional<Stack<BlockPos>> getChunk(ChunkAccess chunk ) {
             if ( PLACED_SLABS.containsKey( chunk ) ) {
                 return Optional.of( PLACED_SLABS.get( chunk ) );
             }
@@ -75,14 +72,14 @@ public final class FeatureUtil {
             return Optional.empty();
         }
 
-        protected static Optional<Stack<BlockPos>> popChunk( ChunkAccess chunk ) {
+        protected Optional<Stack<BlockPos>> popChunk( ChunkAccess chunk ) {
             Optional<Stack<BlockPos>> stackOption = getChunk( chunk );
             PLACED_SLABS.remove( chunk );
 
             return stackOption;
         }
 
-        private static void mapChunk( ChunkAccess chunk ) {
+        private void mapChunk( ChunkAccess chunk ) {
             if ( PLACED_SLABS.containsKey( chunk ) || chunk.getStatus().isOrAfter( ChunkStatus.INITIALIZE_LIGHT ) ) {
                 return;
             }
@@ -94,7 +91,7 @@ public final class FeatureUtil {
             PLACED_SLABS.put( chunk, new Stack<>() );
         }
 
-        private static void trimCache() {
+        private void trimCache() {
             PLACED_SLABS.forEach( ( chunk, stack ) -> {
                 if ( chunk.getStatus().isOrAfter( ChunkStatus.INITIALIZE_LIGHT ) ) {
                     PLACED_SLABS.remove( chunk );
