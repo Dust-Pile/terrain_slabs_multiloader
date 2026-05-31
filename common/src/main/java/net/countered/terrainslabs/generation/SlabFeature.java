@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.SlabType;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -23,8 +24,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import java.util.*;
 
 public class SlabFeature extends Feature<NoneFeatureConfiguration> {
-
-    protected static final FeatureUtil.BlockPosCache TOP_SLAB_CACHE = new FeatureUtil.BlockPosCache();
 
     public SlabFeature(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
@@ -42,7 +41,7 @@ public class SlabFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private void generateSlabs( WorldGenLevel level, BlockPos origin ) {
-        FeatureUtil.iterateChunkBlocks( level, origin, (currentPos, maxY) -> {
+        FeatureUtil.forEachChunkBlock( level, origin, Heightmap.Types.WORLD_SURFACE_WG, (currentPos, maxY) -> {
             if (shouldPlaceBottomSlab(level, currentPos, currentPos.getY() == maxY-1)) {
                 placeBottomSlab(level, currentPos);
             } else if (shouldPlaceTopSlab(level, currentPos)) {
@@ -221,7 +220,7 @@ public class SlabFeature extends Feature<NoneFeatureConfiguration> {
     private void setBlockState(LevelAccessor world, BlockPos pos, BlockState state) {
         if ( state.getBlock() instanceof SlabBlock ) {
             if ( state.getValue( SlabBlock.TYPE ) == SlabType.BOTTOM ) {
-                TOP_SLAB_CACHE.addSlabPos( world, pos );
+                OffsetFeature.BOTTOM_SLAB_CACHE.addBlockPos( world, pos );
             }
         }
 
