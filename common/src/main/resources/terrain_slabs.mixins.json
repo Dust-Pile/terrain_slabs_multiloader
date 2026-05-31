@@ -14,7 +14,6 @@
     "offset.state.MixinBlockState",
     "offset.state.MixinBlockStateBase",
     "offset.state.MixinStateDefinition",
-    "offset.block_tweaks.MixinDoublePlantBlock",
     "shovel.MixinShovelItem",
     "shovel.ShovelItemAccessor",
     "terrain.MixinFallingBlockEntity",
