@@ -2,8 +2,7 @@ package net.countered.terrainslabs.generation;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -14,9 +13,8 @@ import java.util.function.BiFunction;
 
 public final class FeatureUtil {
 
-    public static <L extends LevelAccessor> void forEachSurfaceBlock(L level, ChunkAccess chunk, Heightmap.Types heightType, BiConsumer<BlockPos, Integer> handler ) {
+    public static <L extends LevelAccessor> void forEachSurfaceBlock( L level, ChunkAccess chunk, Heightmap.Types heightType, BiConsumer<BlockPos, Integer> handler ) {
         ChunkPos chunkPos = chunk.getPos();
-        // level.getChunk( chunkPos.x, chunkPos.z );
 
         int minY = level.getMinBuildHeight();
         for (int x = 0; x < 16; x++) {
@@ -31,7 +29,7 @@ public final class FeatureUtil {
     }
 
     public static <L extends LevelAccessor> void forEachChunkBlock( L level, ChunkAccess chunk, Heightmap.Types heightType, BiConsumer<BlockPos, Integer> handler ) {
-        forEachSurfaceBlock( level, chunk, heightType, (topPos, minY ) -> {
+        forEachSurfaceBlock( level, chunk, heightType, ( topPos, minY ) -> {
             int maxY = topPos.getY();
             for (int y = maxY; y >= minY; y--) {
                 BlockPos currentPos = new BlockPos( topPos.getX(), y, topPos.getZ() );

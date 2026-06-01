@@ -13,20 +13,13 @@ import java.util.function.Consumer;
 
 public class WorldGenCache {
 
-    // Should not be a memory leak... should not be...
-    final private static int INITIAL_WARNING_SIZE = 100;
+    // Should not be a memory leak...
+    final private static int INITIAL_WARNING_SIZE = 250;
     final private double GROWTH_FACTOR = 1.5;
     private int warningSize = INITIAL_WARNING_SIZE;
-    final protected Map<ChunkAccess, Pair<Queue<BlockPos>, LevelAccessor>> CACHE = new HashMap<>( INITIAL_WARNING_SIZE );
-    final BiConsumer<WorldGenCache, ChunkAccess> exitTask;
+    final private Map<ChunkAccess, Pair<ArrayList<BlockPos>, LevelAccessor>> CACHE = new HashMap<>( INITIAL_WARNING_SIZE );
 
-    public WorldGenCache() {
-        this.exitTask = ( cache, chunk ) -> {};
-    }
-
-    public WorldGenCache(BiConsumer<WorldGenCache, ChunkAccess> exitTask ) {
-        this.exitTask = exitTask;
-    }
+    public WorldGenCache() {}
 
     public boolean containsChunk( ChunkAccess chunk ) {
         return CACHE.containsKey( chunk );
@@ -36,28 +29,25 @@ public class WorldGenCache {
         ChunkAccess chunk = level.getChunk( pos );
 
         if ( containsChunk( chunk ) ) {
-            CACHE.get( chunk ).getA().offer( pos );
+            CACHE.get( chunk ).getA().add( pos );
         } else if ( mapChunk( level, chunk ) ) {
-            CACHE.get( chunk ).getA().offer( pos );
+            CACHE.get( chunk ).getA().add( pos );
         }
     }
 
-    /**
-     * Explicitly allows adding more items to queue. Will only run for item at time of start.
-     */
-    public void forExistingQueue( ChunkAccess chunk, Consumer<BlockPos> handler ) {
+    public void forEachPos( ChunkAccess chunk, Consumer<BlockPos> handler ) {
         if( !containsChunk( chunk ) ) {
             return;
         }
 
-        Queue<BlockPos> queue = this.getQueue( chunk );
-        assert queue != null;
-        for (int i = queue.size(); i > 0; i-- ) {
-            handler.accept( queue.poll() );
+        ArrayList<BlockPos> list = this.getList( chunk );
+        assert list != null;
+        for ( BlockPos pos : list ) {
+            handler.accept( pos );
         }
     }
 
-    private Queue<BlockPos> getQueue( ChunkAccess chunk ) {
+    private ArrayList<BlockPos> getList( ChunkAccess chunk ) {
         if ( containsChunk( chunk ) ) {
             return CACHE.get( chunk ).getA();
         }
@@ -82,10 +72,17 @@ public class WorldGenCache {
             trimCache();
         }
 
-        CACHE.put( chunk, new Pair<>( new LinkedList<>(), level ) );
+        CACHE.put( chunk, new Pair<>( new ArrayList<>( 200 ), level ) );
         return true;
     }
 
+    protected void removeChunk( ChunkAccess chunk ) {
+        CACHE.remove( chunk );
+    }
+
+    /**
+     * Should not normally occur. Will cause offsets to fail
+     */
     private void trimCache() {
         List<ChunkAccess> chunksToRemove = new ArrayList<>();
         CACHE.forEach( (chunk, stack ) -> {
@@ -97,51 +94,11 @@ public class WorldGenCache {
         warningSize = Math.max( (int) ( CACHE.size() * GROWTH_FACTOR ), INITIAL_WARNING_SIZE );
     }
 
-    protected void tryTrimChunks( ChunkAccess origin ) {
-        Collection<ChunkAccess> neighbors = this.getNeighbors( origin );
-        if ( shouldTrimChunk( origin ) ) {
-            tryTrimChunk( origin );
-            neighbors.forEach( this::tryTrimChunks );
-        }
-    }
-
-    protected void tryTrimChunk( ChunkAccess chunk ) {
-        if ( shouldTrimChunk( chunk ) ) {
-            removeChunk( chunk );
-        }
-    }
-
-    protected void removeChunk( ChunkAccess chunk ) {
-        exitTask.accept( this, chunk );
-        CACHE.remove( chunk );
-    }
-
     private boolean shouldTrimChunk(ChunkAccess chunk ) {
         if ( !containsChunk( chunk ) ) {
             return false;
         }
 
         return chunk.getStatus().isOrAfter( ChunkStatus.SPAWN );
-    }
-
-    protected Collection<ChunkAccess> getNeighbors( ChunkAccess chunk ) {
-        if ( !containsChunk( chunk ) ) {
-            return List.of();
-        }
-
-        Collection<ChunkAccess> output = new ArrayList<>();
-        LevelAccessor level = this.getLevel( chunk );
-        int centerX = chunk.getPos().x;
-        int centerZ = chunk.getPos().z;
-
-        int size = 1;
-        for ( int x = size; x >= -size; x-- ) {
-            for ( int z = size; z >= -size; z-- ) {
-                if ( x == 0 && z == 0 ) continue;
-                output.add( level.getChunk( centerX + x, centerZ + z ) );
-            }
-        }
-
-        return output;
     }
 }

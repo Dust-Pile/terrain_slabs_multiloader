@@ -4,8 +4,8 @@
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
   "mixins": [
-    "feature.MixinChunkMap",
     "feature.MixinDiskFeature",
+    "feature.MixinLevelChunk",
     "feature.MixinOreFeature",
     "feature.WorldGenRegionMixin",
     "offset.place.MixinBlockBehaviours",
