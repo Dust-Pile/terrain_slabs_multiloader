@@ -1,4 +1,4 @@
-package net.countered.terrainslabs.model;
+package net.countered.terrainslabs.fabric.model;
 
 import net.countered.terrainslabs.util.OnTopHelper;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;

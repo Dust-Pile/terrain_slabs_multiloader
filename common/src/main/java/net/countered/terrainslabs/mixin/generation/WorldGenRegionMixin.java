@@ -1,4 +1,4 @@
-package net.countered.terrainslabs.mixin.feature;
+package net.countered.terrainslabs.mixin.generation;
 
 import net.countered.terrainslabs.block.ModSlabsMap;
 import net.countered.terrainslabs.block.customslabs.CustomSlab;

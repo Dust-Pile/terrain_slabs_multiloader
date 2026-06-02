@@ -3,7 +3,7 @@ package net.countered.terrainslabs.fabric;
 import eu.midnightdust.lib.config.MidnightConfig;
 import net.countered.terrainslabs.TerrainSlabs;
 import net.countered.terrainslabs.fabric.feature.ModAddedFeatures;
-import net.countered.terrainslabs.model.SlabOffsetModel;
+import net.countered.terrainslabs.fabric.model.SlabOffsetModel;
 import net.countered.terrainslabs.platform.fabric.PlatformConfigHooksImpl;
 import net.countered.terrainslabs.registries.ModFlattenablesRegistry;
 import net.countered.terrainslabs.util.OnTopHelper;

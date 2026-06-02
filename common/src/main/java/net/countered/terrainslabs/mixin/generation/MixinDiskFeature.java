@@ -1,4 +1,4 @@
-package net.countered.terrainslabs.mixin.feature;
+package net.countered.terrainslabs.mixin.generation;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.countered.terrainslabs.block.ModSlabsMap;

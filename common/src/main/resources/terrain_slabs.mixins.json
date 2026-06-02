@@ -6,15 +6,16 @@
   "client": [
   ],
   "mixins": [
-    "feature.MixinDiskFeature",
-    "feature.MixinOreFeature",
-    "feature.WorldGenRegionMixin",
+    "blocks.SpreadingSnowyDirtBlockMixin",
+    "generation.MixinDiskFeature",
+    "generation.MixinOreFeature",
+    "generation.WorldGenRegionMixin",
     "ontop.place.SaplingBlockMixin",
     "ontop.place.SeagrassBlockMixin",
     "ontop.place.SnowLayerMixin",
     "ontop.place.VegetationBlockMixin",
     "ontop.render.MixinBlockStateBase",
-    "ontop.render.target.MixinRaytrace",
+    "ontop.render.target.MixinRaytrace"
   ],
   "injectors": {
     "defaultRequire": 1

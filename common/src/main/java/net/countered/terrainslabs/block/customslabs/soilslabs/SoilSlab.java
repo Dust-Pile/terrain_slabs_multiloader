@@ -4,10 +4,6 @@ import net.countered.terrainslabs.block.customslabs.CustomSlab;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SnowLayerBlock;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.world.level.lighting.LightEngine;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelReader;
@@ -71,27 +67,6 @@ public class SoilSlab extends CustomSlab {
 
     private static boolean isSnow(BlockState state) {
         return state.is(BlockTags.SNOW);
-    }
-
-    /**
-     * Shared logic for grass-like blocks (Grass, Mycelium) to determine if they can remain.
-     */
-    protected static boolean canBeGrassLike(BlockState state, LevelReader levelReader, BlockPos pos) {
-        BlockPos blockPos = pos.above();
-        BlockState blockState = levelReader.getBlockState(blockPos);
-        if (blockState.is(Blocks.SNOW) && (Integer)blockState.getValue(SnowLayerBlock.LAYERS) == 1) {
-            return true;
-        } else if (blockState.getFluidState().getAmount() == 8) {
-            return false;
-        } else {
-            int i = LightEngine.getLightBlockInto(state, Blocks.GRASS_BLOCK.defaultBlockState(), Direction.UP, blockState.getLightBlock());
-            return i < 15;
-        }
-    }
-
-    protected static boolean canPropagateGrassLike(BlockState state, LevelReader level, BlockPos pos) {
-        BlockPos blockPos = pos.above();
-        return canBeGrassLike(state, level, pos) && !level.getFluidState(blockPos).is(FluidTags.WATER);
     }
 
     @Override
