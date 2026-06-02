@@ -5,36 +5,40 @@ import net.countered.terrainslabs.TerrainSlabs;
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.ProtoChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
+
+import java.util.List;
 
 final public class OffsetFeature {
 
     public static final WorldGenCache BOTTOM_SLAB_CACHE = new WorldGenCache();
 
-    public static void run( ProtoChunk chunk ) {
+    public static void run( ServerLevel serverLevel, ProtoChunk chunk ) {
         if ( !PlatformConfigHooks.isSlabGenerationEnabled()
                 || ( !PlatformConfigHooks.isSnowOnSlabsEnabled() && !PlatformConfigHooks.isVegetationOnSlabsEnabled() )
         ) {
             return;
         }
 
+        LevelAccessor level = new WorldGenRegion( serverLevel, List.of( chunk ), ChunkStatus.SPAWN, 0 );
         if ( !BOTTOM_SLAB_CACHE.containsChunk( chunk ) ) {
-            TerrainSlabs.LOGGER.error( "Chunk {} failed to load offsets due to missing cache element.", chunk );
-            return;
+            fixChunkOffsets( level, chunk );
+            TerrainSlabs.LOGGER.info( "Loaded chunk uncached." );
         } else {
-            LevelAccessor level = BOTTOM_SLAB_CACHE.getLevel( chunk );
-            fixChunkOffsetsCached( level, chunk, BOTTOM_SLAB_CACHE, Direction.UP );
-
-            // Ensure slabs on structures / other features get proper snow place
             fixSurfaceOffsets( level, chunk, Heightmap.Types.MOTION_BLOCKING );
+            fixChunkOffsetsCached( level, chunk, BOTTOM_SLAB_CACHE, Direction.UP );
+            BOTTOM_SLAB_CACHE.removeChunk( chunk );
         }
-
-        BOTTOM_SLAB_CACHE.removeChunk( chunk );
     }
 
     private static void fixChunkOffsetsCached( LevelAccessor level, ChunkAccess chunk, WorldGenCache cache, Direction dir) {
@@ -49,40 +53,40 @@ final public class OffsetFeature {
         } );
     }
 
+    // This is a fallback method. Does not work because it cannot be passed a level.
+    private static void fixChunkOffsets( LevelAccessor level, ChunkAccess chunk ) {
+        FeatureUtil.forEachChunkBlock( level, chunk, Heightmap.Types.WORLD_SURFACE_WG, (pos, maxY ) -> {
+            BlockState state = level.getBlockState( pos );
+
+            if ( !( state.getBlock() instanceof SlabBlock) ) {
+                return; //continue
+            }
+
+            if ( ( state.getValue( SlabBlock.TYPE ) == SlabType.BOTTOM ) ) {
+                replaceStatesInDir( level, pos, Direction.UP );
+            }
+        } );
+    }
+
     private static void fixSurfaceOffsets( LevelAccessor level, ChunkAccess chunk, Heightmap.Types heightType ) {
         FeatureUtil.forEachSurfaceBlock( level, chunk, heightType, (topPos, minY ) -> {
             replaceStatesInDir( level, topPos, Direction.UP );
         } );
     }
 
-    private static boolean replaceStatesInDir( LevelAccessor level, BlockPos pos, Direction dir ) {
-        return FeatureUtil.iterateDirUntilFail( level, pos.relative( dir ), dir,
-                ( aPos, aState ) -> placeOntopState( level, aPos, aState )
+    private static void replaceStatesInDir(LevelAccessor level, BlockPos pos, Direction dir ) {
+        FeatureUtil.iterateDirUntilFail(level, pos.relative(dir), dir,
+                (aPos, aState) -> placeOntopState(level, aPos, aState)
         );
     }
 
     // TODO: Rename and handle onbottom states
     private static boolean placeOntopState( LevelAccessor level, BlockPos pos, BlockState state ) {
         if ( IOffsetState.shouldBeOnTopState( level, pos, state ) ) {
-            level.setBlock( pos, ((IOffsetState) state ).terrain_slabs$getOffsetState(), Block.UPDATE_CLIENTS );
-            return true;
+            state = ((IOffsetState) state ).terrain_slabs$getOffsetState();
+            return level.setBlock( pos, state, Block.UPDATE_CLIENTS );
         }
 
         return false;
     }
-
-    // This is a fallback method. Does not work because it cannot be passed a level.
-//    private static void fixChunkOffsets( ChunkAccess chunk ) {
-//        FeatureUtil.forEachChunkBlock( chunk, Heightmap.Types.WORLD_SURFACE_WG, (pos, maxY ) -> {
-//            BlockState state = chunk.getBlockState( pos );
-//
-//            if ( !( state.getBlock() instanceof SlabBlock ) ) {
-//                return; //continue
-//            }
-//
-//            if ( ( state.getValue( SlabBlock.TYPE ) == SlabType.BOTTOM ) ) {
-//                replaceStatesInDir( chunk, pos, Direction.UP );
-//            }
-//        } );
-//    }
 }

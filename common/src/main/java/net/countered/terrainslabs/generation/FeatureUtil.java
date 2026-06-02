@@ -48,5 +48,4 @@ public final class FeatureUtil {
 
         return pos != initPos;
     }
-
 }
