@@ -5,6 +5,7 @@
   "minVersion": "0.8",
   "mixins": [
     "feature.MixinDiskFeature",
+    "feature.MixinLevelChunk",
     "feature.MixinOreFeature",
     "feature.WorldGenRegionMixin",
     "offset.place.MixinBlockBehaviours",

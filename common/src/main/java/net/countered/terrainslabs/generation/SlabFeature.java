@@ -41,7 +41,7 @@ public class SlabFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private void generateSlabs( WorldGenLevel level, BlockPos origin ) {
-        FeatureUtil.forEachChunkBlock( level, origin, Heightmap.Types.WORLD_SURFACE_WG, (currentPos, maxY) -> {
+        FeatureUtil.forEachChunkBlock( level, level.getChunk( origin ), Heightmap.Types.WORLD_SURFACE_WG, (currentPos, maxY) -> {
             if (shouldPlaceBottomSlab(level, currentPos, currentPos.getY() == maxY-1)) {
                 placeBottomSlab(level, currentPos);
             } else if (shouldPlaceTopSlab(level, currentPos)) {
