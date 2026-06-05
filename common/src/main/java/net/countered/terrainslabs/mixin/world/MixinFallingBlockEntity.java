@@ -1,4 +1,4 @@
-package net.countered.terrainslabs.mixin.terrain;
+package net.countered.terrainslabs.mixin.world;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;

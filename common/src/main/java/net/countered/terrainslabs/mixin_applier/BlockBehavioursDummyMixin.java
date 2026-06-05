@@ -1,4 +1,4 @@
-package net.countered.terrainslabs.mixin.offset.place;
+package net.countered.terrainslabs.mixin_applier;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -13,21 +13,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * Targets include all vanilla classes that need to be modified
- */
-@Mixin( targets = {
-        "net.minecraft.world.level.block.BushBlock",
-        "net.minecraft.world.level.block.MushroomBlock",
-        "net.minecraft.world.level.block.TorchBlock",
-        "net.minecraft.world.level.block.LanternBlock",
-        "net.minecraft.world.level.block.SnowLayerBlock",
-        "net.minecraft.world.level.block.WitherRoseBlock",
-        "net.minecraft.world.level.block.PitcherCropBlock",
-        "net.minecraft.world.level.block.SeaPickleBlock",
-        "net.minecraft.world.level.block.SmallDripleafBlock"
-})
-public class MixinBlockBehaviours {
+@SuppressWarnings({"UnresolvedMixinReference", "unused", "UnusedMixin"})
+@Mixin( priority = 1200, remap = false, targets = {
+        "net.minecraft.world.level.block.state.BlockBehaviour"
+} )
+public class BlockBehavioursDummyMixin {
     /**
      * When calling for the state below a block, pretends it's the matching full block when relevant.
      */
@@ -77,4 +67,5 @@ public class MixinBlockBehaviours {
                 instance, particleData, x, y, z, xSpeed, ySpeed, zSpeed, original, state, level, pos, random
         );
     }
+
 }

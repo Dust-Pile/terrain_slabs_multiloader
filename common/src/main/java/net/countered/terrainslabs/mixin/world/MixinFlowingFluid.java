@@ -1,4 +1,4 @@
-package net.countered.terrainslabs.mixin.terrain;
+package net.countered.terrainslabs.mixin.world;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

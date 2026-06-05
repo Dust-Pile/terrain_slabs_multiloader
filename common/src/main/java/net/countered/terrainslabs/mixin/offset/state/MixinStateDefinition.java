@@ -2,6 +2,7 @@ package net.countered.terrainslabs.mixin.offset.state;
 
 import net.countered.platform.PlatformConfigHooks;
 import net.countered.terrainslabs.block.OffsetProperty;
+import net.countered.terrainslabs.mixin_applier.ClassCacheAccess;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -25,7 +26,8 @@ public abstract class MixinStateDefinition {
             return propertiesByName;
         }
 
-        propertiesByName.put( "offset", OffsetProperty.ONTOP);
+        propertiesByName.put( "offset", OffsetProperty.ONTOP );
+        ClassCacheAccess.addToCache( owner.getClass().getName() );
         return propertiesByName;
     }
 

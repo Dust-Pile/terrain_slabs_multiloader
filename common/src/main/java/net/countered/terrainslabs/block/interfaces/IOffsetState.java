@@ -1,5 +1,6 @@
 package net.countered.terrainslabs.block.interfaces;
 
+import net.countered.terrainslabs.api.IConditionalOffset;
 import net.countered.terrainslabs.block.OffsetProperty;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;

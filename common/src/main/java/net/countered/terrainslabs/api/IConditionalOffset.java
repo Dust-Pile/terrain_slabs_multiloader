@@ -1,4 +1,4 @@
-package net.countered.terrainslabs.block.interfaces;
+package net.countered.terrainslabs.api;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelHeightAccessor;

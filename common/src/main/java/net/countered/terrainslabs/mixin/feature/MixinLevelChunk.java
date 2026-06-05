@@ -17,7 +17,7 @@ public class MixinLevelChunk {
     @ModifyVariable( method = "<init>(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/level/chunk/ProtoChunk;Lnet/minecraft/world/level/chunk/LevelChunk$PostLoadProcessor;)V", at = @At("HEAD"), argsOnly = true )
     private static ProtoChunk terrain_slabs$offsetGeneration(
             ProtoChunk pChunk, ServerLevel level, ProtoChunk unused,
-            LevelChunk.PostLoadProcessor processor
+            LevelChunk.PostLoadProcessor postLoad
     ) {
         OffsetFeature.run( level, pChunk );
         return pChunk;

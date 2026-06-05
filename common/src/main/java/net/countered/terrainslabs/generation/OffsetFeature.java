@@ -19,6 +19,9 @@ import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.List;
 
+/**
+ * Did not work when run as a feature; missed too many things despite my efforts. Run as a custom final step instead.
+ */
 final public class OffsetFeature {
 
     public static final WorldGenCache BOTTOM_SLAB_CACHE = new WorldGenCache();
@@ -53,7 +56,7 @@ final public class OffsetFeature {
         } );
     }
 
-    // This is a fallback method. Does not work because it cannot be passed a level.
+    // This is a fallback method. Cached version runs faster but is not always available.
     private static void fixChunkOffsets( LevelAccessor level, ChunkAccess chunk ) {
         FeatureUtil.forEachChunkBlock( level, chunk, Heightmap.Types.WORLD_SURFACE_WG, (pos, maxY ) -> {
             BlockState state = level.getBlockState( pos );

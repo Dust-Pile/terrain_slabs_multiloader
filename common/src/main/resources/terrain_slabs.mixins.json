@@ -17,8 +17,8 @@
     "offset.state.MixinStateDefinition",
     "shovel.MixinShovelItem",
     "shovel.ShovelItemAccessor",
-    "terrain.MixinFallingBlockEntity",
-    "terrain.MixinFlowingFluid"
+    "world.MixinFallingBlockEntity",
+    "world.MixinFlowingFluid"
   ],
   "injectors": {
     "defaultRequire": 1
