@@ -57,7 +57,7 @@ public final class TerrainSlabsMixinPlugin implements IMixinConfigPlugin {
             return null;
         }
         MixinDirector.INSTANCE.define( MixinDirector.DYNAMIC_MIXIN_NAME );
-        return List.of( MixinDirector.DYNAMIC_MIXIN_NAME );
+        return List.of( MixinDirector.DYNAMIC_MIXIN_NAME_SHORT );
     }
 
     public String getRefMapperConfig() {return null;}

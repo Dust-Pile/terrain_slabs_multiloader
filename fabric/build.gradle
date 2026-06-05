@@ -88,11 +88,6 @@ dependencies {
     modImplementation include ("eu.midnightdust:midnightlib:${project.midnightlib_version_fabric}")
 
     modCompileOnly ("maven.modrinth:sodium:mc1.20.1-0.5.13-fabric")
-
-    // Test
-    modRuntimeOnly "curse.maven:biomes-o-plenty-220318:6364066"
-    modRuntimeOnly "curse.maven:glitchcore-955399:5787838"
-    modRuntimeOnly "curse.maven:terrablender-fabric-565956:6290449"
 }
 
 processResources {
