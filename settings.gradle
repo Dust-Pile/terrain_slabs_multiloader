@@ -9,6 +9,5 @@ pluginManagement {
 
 rootProject.name = 'terrain_slabs'
 
-include 'common'
 include 'fabric'
 include 'neoforge'
