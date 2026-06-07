@@ -1,6 +1,6 @@
 plugins {
     id 'net.neoforged.moddev' version '2.0.141'
-    id "me.shedaniel.unified-publishing" version "0.1.+"
+    //id "me.shedaniel.unified-publishing" version "0.1.+"
 }
 
 repositories {
@@ -49,6 +49,7 @@ processResources {
     }
 }
 
+/*
 unifiedPublishing {
     project {
         displayName = "Terrain Slabs v$mod_version"
@@ -76,3 +77,5 @@ unifiedPublishing {
         }
     }
 }
+
+ */
