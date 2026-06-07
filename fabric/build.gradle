@@ -1,6 +1,6 @@
 plugins {
     id 'net.fabricmc.fabric-loom' version '1.16-SNAPSHOT'
-    //id "me.shedaniel.unified-publishing" version "0.1.+"
+    id "me.shedaniel.unified-publishing" version "0.1.+"
 }
 
 loom {
@@ -51,7 +51,7 @@ processResources {
         expand version: inputs.properties.version
     }
 }
-/*
+
 unifiedPublishing {
     project {
         displayName = "Terrain Slabs v$mod_version"
@@ -79,5 +79,3 @@ unifiedPublishing {
         }
     }
 }
-
- */
