@@ -3,6 +3,10 @@ plugins {
     //id "me.shedaniel.unified-publishing" version "0.1.+"
 }
 
+loom {
+    accessWidenerPath = file("../common/src/main/resources/terrain_slabs.accesswidener")
+}
+
 repositories {
     maven { url = "https://maven.midnightdust.eu/releases" }
     maven {

@@ -22,7 +22,6 @@ public final class TerrainSlabsFabricClient implements ClientModInitializer {
         registerBuiltinResourcePacks();
     }
 
-    //TODO test with quark
     private void registerBlockColorProviders() {
         BlockColorRegistry.register(List.of(BlockTintSources.grass()), ModBlocksRegistry.GRASS_SLAB.get());
     }

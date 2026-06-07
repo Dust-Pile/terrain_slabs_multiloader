@@ -18,6 +18,8 @@ sourceSets {
 neoForge {
     version = rootProject.neoforge_version
 
+    accessTransformers.from file('src/main/resources/META-INF/accesstransformer.cfg')
+
     mods {
         terrain_slabs {
             sourceSet sourceSets.main

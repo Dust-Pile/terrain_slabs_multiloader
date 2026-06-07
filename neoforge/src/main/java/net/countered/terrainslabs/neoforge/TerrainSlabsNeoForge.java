@@ -8,6 +8,7 @@ import net.countered.terrainslabs.neoforge.model.SlabOffsetModel;
 import net.countered.terrainslabs.platform.PlatformConfigHooks;
 import net.countered.terrainslabs.platform.neoforge.PlatformConfigHooksImpl;
 import net.countered.terrainslabs.registries.ModBlocksRegistry;
+import net.countered.terrainslabs.registries.ModFlattenablesRegistry;
 import net.countered.terrainslabs.registries.ModTillableRegistry;
 import net.countered.terrainslabs.util.OnTopHelper;
 import net.minecraft.client.color.block.BlockTintSources;
@@ -66,7 +67,7 @@ public final class TerrainSlabsNeoForge {
     private void setupServer(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             MidnightConfig.init(TerrainSlabs.MOD_ID, PlatformConfigHooksImpl.class);
-//     TODO       ModFlattenablesRegistry.registerFlattenables();
+            ModFlattenablesRegistry.registerFlattenables();
             ModTillableRegistry.registerTillables();
         });
     }

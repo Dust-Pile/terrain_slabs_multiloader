@@ -6,5 +6,5 @@ dependencies {
     minecraft "com.mojang:minecraft:$rootProject.minecraft_version"
 
     // Architectury common API
-    compileOnly "dev.architectury:architectury:$rootProject.architectury_api_version"
+    implementation "dev.architectury:architectury:$rootProject.architectury_api_version"
 }
