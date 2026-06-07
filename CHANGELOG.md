@@ -7,6 +7,7 @@
 
 ### Fixed
 - fix grass spreading between slabs and blocks
+- fix fabric dedicated server crash
 
 ## [3.2.0]
 Many internal improvements

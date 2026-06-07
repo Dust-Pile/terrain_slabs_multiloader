@@ -1,8 +1,11 @@
 package net.countered.terrainslabs.fabric.client;
 
 import net.countered.terrainslabs.TerrainSlabs;
+import net.countered.terrainslabs.fabric.model.SlabOffsetModel;
 import net.countered.terrainslabs.registries.ModBlocksRegistry;
+import net.countered.terrainslabs.util.OnTopHelper;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
@@ -20,6 +23,7 @@ public final class TerrainSlabsFabricClient implements ClientModInitializer {
     public void onInitializeClient() {
         registerBlockColorProviders();
         registerBuiltinResourcePacks();
+        registerOffsetModel();
     }
 
     private void registerBlockColorProviders() {
@@ -35,4 +39,17 @@ public final class TerrainSlabsFabricClient implements ClientModInitializer {
                 ResourcePackActivationType.NORMAL
         );
     }
+
+    private void registerOffsetModel() {
+        ModelLoadingPlugin.register(context -> {
+            context.modifyBlockModelAfterBake().register((state, context1) -> {
+                if (OnTopHelper.terrain_slabs$isStateValidOnTop(context1.state())) {
+                    return new SlabOffsetModel(state);
+                }
+                return state;
+            });
+        });
+    }
+
+
 }
