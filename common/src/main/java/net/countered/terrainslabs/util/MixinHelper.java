@@ -1,7 +1,7 @@
 package net.countered.terrainslabs.util;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import net.countered.terrainslabs.block.interfaces.IOffsetState;
+import net.countered.platform.PlatformConfigHooks;
 import net.countered.terrainslabs.block.interfaces.ISlabCopy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -9,6 +9,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -65,7 +66,32 @@ public class MixinHelper {
     //================//
 
     private static boolean terrain_slabs$skipModify(BlockPos offPos, BlockState targetState, BlockPos pos ) {
-        return !((IOffsetState) targetState ).terrain_slabs$hasOffsetState()
+        return !shouldAllowOffsetState( targetState )
                 || !( offPos.getX() == pos.getX() && offPos.getZ() == pos.getZ() && offPos.getY() == pos.getY() - 1 );
+    }
+
+    private static boolean shouldAllowOffsetState(BlockState state ) {
+        Block block = state.getBlock();
+        if ( terrain_slabs$isDefaultOffset( block ) ) {
+            return !PlatformConfigHooks.excludeOnTop( block );
+        }
+
+        return PlatformConfigHooks.includeOntop( block );
+    }
+
+    // TODO: Way to dynamically add/remove vegetation classes... (Maybe)
+    // hint: someClass.isInstance(someObj)
+    private static boolean terrain_slabs$isDefaultOffset( Block block ) {
+        if ( block instanceof BushBlock) {
+            return PlatformConfigHooks.isVegetationOnSlabsEnabled();
+
+        } else if ( block instanceof TorchBlock || block instanceof LanternBlock) {
+            return !(block instanceof WallTorchBlock) && !(block instanceof RedstoneWallTorchBlock);
+
+        } else if ( block instanceof SnowLayerBlock ) {
+            return PlatformConfigHooks.isSnowOnSlabsEnabled();
+        }
+
+        return false;
     }
 }

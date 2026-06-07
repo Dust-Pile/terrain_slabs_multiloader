@@ -62,7 +62,7 @@ public class MixinBlockBehaviours {
     /**
      * Fix particle position. Lazy implementation may need to be fixed later.
      */
-    @SuppressWarnings({"MixinAnnotationTarget"})
+    @SuppressWarnings({"MixinAnnotationTarget", "InvalidInjectorMethodSignature"})
     @WrapOperation( method = "animateTick", require = 0, at =
     @At( value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V" )
     )

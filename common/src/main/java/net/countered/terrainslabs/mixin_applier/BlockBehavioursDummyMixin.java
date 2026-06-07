@@ -13,10 +13,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+/**
+ * This class is never used in the code. It is only used to compile a byte list for the MixinDirector before upload.
+ */
 @SuppressWarnings({"UnresolvedMixinReference", "unused", "UnusedMixin"})
-@Mixin( priority = 1200, remap = false, targets = {
-        "net.minecraft.world.level.block.state.BlockBehaviour"
-} )
+//@Mixin( priority = 1200, remap = false, targets = {
+//        "net.minecraft.world.level.block.state.BlockBehaviour"
+//} )
 public class BlockBehavioursDummyMixin {
     /**
      * When calling for the state below a block, pretends it's the matching full block when relevant.

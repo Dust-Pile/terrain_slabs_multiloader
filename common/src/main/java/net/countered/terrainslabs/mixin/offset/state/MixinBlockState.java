@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import org.spongepowered.asm.mixin.Mixin;
 
 /**
- * Include helpful methods
+ * Include helpful methods in blockstates
  */
 @Mixin( BlockState.class )
 public class MixinBlockState implements IOffsetState {

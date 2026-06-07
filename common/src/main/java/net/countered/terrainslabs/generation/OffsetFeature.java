@@ -1,7 +1,6 @@
 package net.countered.terrainslabs.generation;
 
 import net.countered.platform.PlatformConfigHooks;
-import net.countered.terrainslabs.TerrainSlabs;
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -36,7 +35,6 @@ final public class OffsetFeature {
         LevelAccessor level = new WorldGenRegion( serverLevel, List.of( chunk ), ChunkStatus.SPAWN, 0 );
         if ( !BOTTOM_SLAB_CACHE.containsChunk( chunk ) ) {
             fixChunkOffsets( level, chunk );
-            TerrainSlabs.LOGGER.info( "Loaded chunk uncached." );
         } else {
             fixSurfaceOffsets( level, chunk, Heightmap.Types.MOTION_BLOCKING );
             fixChunkOffsetsCached( level, chunk, BOTTOM_SLAB_CACHE, Direction.UP );

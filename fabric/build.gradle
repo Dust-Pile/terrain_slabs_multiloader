@@ -61,11 +61,11 @@ configurations {
     }
 }
 
-repositories {
-    maven {
-        url "https://cursemaven.com"
-    }
-}
+//repositories {
+//    maven {
+//        url "https://cursemaven.com"
+//    }
+//}
 
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
@@ -88,6 +88,7 @@ dependencies {
     modImplementation include ("eu.midnightdust:midnightlib:${project.midnightlib_version_fabric}")
 
     modCompileOnly ("maven.modrinth:sodium:mc1.20.1-0.5.13-fabric")
+
 }
 
 processResources {

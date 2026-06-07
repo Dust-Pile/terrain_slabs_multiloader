@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+// TODO: Add method (or new class) to check if a given class is available
 public class ClassCacheAccess {
     private static final Path CACHE_PATH = Platform.getConfigFolder().resolve( TerrainSlabs.MOD_ID + "/class_cache.json" );
     private static final Path CACHE_DIR = Platform.getConfigFolder().resolve( TerrainSlabs.MOD_ID );
@@ -33,13 +34,13 @@ public class ClassCacheAccess {
     }
 
     public static boolean addToCache( String clazz ) {
-        TerrainSlabsMixinPlugin.LOGGER.debug( clazz );
         String[] elements = clazz.split( "\\." );
         if ( elements.length < 2 || elements[1].equals( "minecraft" ) ) {
             // Exclude minecraft classes. Only things with no refmap should be added dynamically
             return false;
         }
 
+        TerrainSlabsMixinPlugin.LOGGER.info( clazz );
         if ( !cacheContains( clazz ) && newClasses.add( clazz ) ) {
             hasNewClasses = true;
             return true;
