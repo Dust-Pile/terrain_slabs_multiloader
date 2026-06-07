@@ -100,7 +100,7 @@ public class FarmlandSlab extends NonFullSlab{
     @Override
     public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
         if (level instanceof ServerLevel serverLevel
-                && level.random.nextFloat() < fallDistance - 0.5
+                && level.getRandom().nextFloat() < fallDistance - 0.5
                 && entity instanceof LivingEntity
                 && (entity instanceof Player || serverLevel.getGameRules().get(GameRules.MOB_GRIEFING))
                 && entity.getBbWidth() * entity.getBbWidth() * entity.getBbHeight() > 0.512F) {

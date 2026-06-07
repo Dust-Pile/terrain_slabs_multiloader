@@ -32,11 +32,11 @@ public abstract class SpreadingSoilSlab extends SoilSlab {
             return false;
         } else {
             if (state.getBlock() instanceof SlabBlock) {
-                int lightOpacity = aboveState.getLightBlock();
+                int lightOpacity = aboveState.getLightDampening();
                 return lightOpacity < 15;
             }
             else {
-                int i = LightEngine.getLightBlockInto(state, aboveState, Direction.UP, aboveState.getLightBlock());
+                int i = LightEngine.getLightBlockInto(state, aboveState, Direction.UP, aboveState.getLightDampening());
                 return i < 15;
             }
         }

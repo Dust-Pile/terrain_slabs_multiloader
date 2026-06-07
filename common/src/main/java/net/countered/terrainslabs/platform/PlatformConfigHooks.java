@@ -1,31 +1,44 @@
 package net.countered.terrainslabs.platform;
 
-import dev.architectury.injectables.annotations.ExpectPlatform;
-
 public class PlatformConfigHooks {
 
-    @ExpectPlatform
-    public static boolean isSlabGenerationEnabled() {
-        throw new AssertionError();
+    private static Provider provider;
+
+    private PlatformConfigHooks() {}
+
+    public static void setProvider(Provider provider) {
+        PlatformConfigHooks.provider = provider;
     }
 
-    @ExpectPlatform
-    public static boolean isVegetationOnSlabsEnabled() {
-        throw new AssertionError();
+    private static Provider getProvider() {
+        if (provider == null) {
+            throw new IllegalStateException("PlatformConfigHooks provider not initialized");
+        }
+
+        return provider;
     }
 
-    @ExpectPlatform
+    public static boolean isSlabGenerationEnabled() { return getProvider().isSlabGenerationEnabled();}
+
+    public static boolean isVegetationOnSlabsEnabled() { return getProvider().isVegetationOnSlabsEnabled();}
+
     public static boolean isSnowOnSlabsEnabled() {
-        throw new AssertionError();
+        return getProvider().isSnowOnSlabsEnabled();
     }
 
-    @ExpectPlatform
     public static int getSlabRunLength() {
-        throw new AssertionError();
+        return getProvider().getSlabRunLength();
     }
 
-    @ExpectPlatform
-    public static boolean isCornerSlabsEnabled() {
-        throw new AssertionError();
+    public static boolean isCornerSlabsEnabled() { return getProvider().isCornerSlabsEnabled();}
+
+    public interface Provider {
+        boolean isSlabGenerationEnabled();
+        boolean isVegetationOnSlabsEnabled();
+        boolean isSnowOnSlabsEnabled();
+        int getSlabRunLength();
+        boolean isCornerSlabsEnabled();
     }
 }
+
+

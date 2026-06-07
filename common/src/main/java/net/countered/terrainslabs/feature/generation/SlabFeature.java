@@ -48,7 +48,7 @@ public class SlabFeature extends Feature<NoneFeatureConfiguration> {
         Set<BlockPos> topSlabPositions = new HashSet<>();
         Set<BlockPos> extendedPositions = new HashSet<>();
 
-        ChunkPos chunkPos = new ChunkPos(origin);
+        ChunkPos chunkPos = ChunkPos.containing(origin);
         int minY = level.getMinY();
         int offsetXZ = PlatformConfigHooks.isCornerSlabsEnabled() ? 1 : 0;
         for (int x = -offsetXZ; x < 16 + offsetXZ ; x++) {

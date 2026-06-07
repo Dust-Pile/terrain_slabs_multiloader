@@ -1,14 +1,14 @@
-package net.countered.terrainslabs.neoforge.model;
+package net.countered.terrainslabs.model;
 
 import net.countered.terrainslabs.util.OnTopHelper;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -34,7 +34,7 @@ public class SlabOffsetModel implements BlockStateModel {
             BlockPos pos,
             BlockState state,
             RandomSource random,
-            List<BlockModelPart> parts
+            List<BlockStateModelPart> parts
     ) {
         boolean slabBelow = isPosSlab(level, pos.below());
         boolean isAboveShifted = isAboveShifted(level, state, pos);
@@ -45,10 +45,10 @@ public class SlabOffsetModel implements BlockStateModel {
             return;
         }
 
-        List<BlockModelPart> originalParts = new ArrayList<>();
+        List<BlockStateModelPart> originalParts = new ArrayList<>();
         wrapped.collectParts(level, pos, state, random, originalParts);
 
-        for (BlockModelPart part : originalParts) {
+        for (BlockStateModelPart part : originalParts) {
             java.util.Map<Direction, List<BakedQuad>> newCullQuads = new java.util.HashMap<>();
             List<BakedQuad> newUnculledQuads = new ArrayList<>();
 
@@ -84,7 +84,7 @@ public class SlabOffsetModel implements BlockStateModel {
                 }
             }
 
-            parts.add(new BlockModelPart() {
+            parts.add(new BlockStateModelPart() {
                 @Override
                 public List<BakedQuad> getQuads(@Nullable Direction side) {
                     if (side == null) {
@@ -99,8 +99,13 @@ public class SlabOffsetModel implements BlockStateModel {
                 }
 
                 @Override
-                public TextureAtlasSprite particleIcon() {
-                    return part.particleIcon();
+                public Material.Baked particleMaterial() {
+                    return part.particleMaterial();
+                }
+
+                @Override
+                public @BakedQuad.MaterialFlags int materialFlags() {
+                    return part.materialFlags();
                 }
             });
         }
@@ -115,8 +120,9 @@ public class SlabOffsetModel implements BlockStateModel {
         return new BakedQuad(
                 p0, p1, p2, p3,
                 quad.packedUV0(), quad.packedUV1(), quad.packedUV2(), quad.packedUV3(),
-                quad.tintIndex(), quad.direction(), quad.sprite(), quad.shade(), quad.lightEmission(),
-                quad.bakedNormals(), quad.bakedColors(), quad.hasAmbientOcclusion()
+                quad.direction(),
+                quad.materialInfo(),
+                quad.bakedNormals(), quad.bakedColors()
         );
     }
 
@@ -147,34 +153,22 @@ public class SlabOffsetModel implements BlockStateModel {
     }
 
     @Override
-    public List<BlockModelPart> collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
-        List<BlockModelPart> parts = new ArrayList<>();
-        this.collectParts(level, pos, state, random, parts);
-        return parts;
-    }
-
-    @Override
     public @Nullable Object createGeometryKey(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
         return wrapped.createGeometryKey(level, pos, state, random);
     }
 
     @Override
-    public TextureAtlasSprite particleIcon(BlockAndTintGetter level, BlockPos pos, BlockState state) {
-        return wrapped.particleIcon(level, pos, state);
-    }
-
-    @Override
-    public TextureAtlasSprite particleIcon() {
-        return wrapped.particleIcon();
-    }
-
-    @Override
-    public void collectParts(RandomSource random, List<BlockModelPart> output) {
+    public void collectParts(RandomSource random, List<BlockStateModelPart> output) {
         wrapped.collectParts(random, output);
     }
 
     @Override
-    public List<BlockModelPart> collectParts(RandomSource random) {
-        return wrapped.collectParts(random);
+    public Material.Baked particleMaterial() {
+        return wrapped.particleMaterial();
+    }
+
+    @Override
+    public @BakedQuad.MaterialFlags int materialFlags() {
+        return wrapped.materialFlags();
     }
 }

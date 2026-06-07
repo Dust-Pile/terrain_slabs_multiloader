@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SpreadingSnowyDirtBlock;
+import net.minecraft.world.level.block.SpreadingSnowyBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(SpreadingSnowyDirtBlock.class)
+@Mixin(SpreadingSnowyBlock.class)
 public abstract class SpreadingSnowyDirtBlockMixin {
 
     @Invoker("canPropagate")
@@ -23,13 +23,13 @@ public abstract class SpreadingSnowyDirtBlockMixin {
 
     @Redirect(
             method = "randomTick",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Ljava/lang/Object;)Z")
     )
-    private boolean redirectDirtCheck(BlockState targetState, Block block) {
-        if (block == Blocks.DIRT) {
+    private boolean redirectDirtCheck(BlockState targetState, Object o) {
+        if ((Block) o == Blocks.DIRT) {
             return targetState.is(Blocks.DIRT) || targetState.is(ModBlocksRegistry.DIRT_SLAB.get());
         }
-        return targetState.is(block);
+        return targetState.is((Block) o);
     }
 
     @Redirect(

@@ -40,11 +40,15 @@ public class ModItemsRegistry {
                 Registries.ITEM,
                 Identifier.parse(TerrainSlabs.MOD_ID + ":" + name)
         );
-        return ITEMS.register(name, () -> factory.apply(
+
+        RegistrySupplier<T> item = ITEMS.register(name, () -> factory.apply(
                 new Item.Properties()
                         .setId(key)
-                        .arch$tab(TERRAIN_SLABS_TAB)
         ));
+
+        CreativeTabRegistry.append(TERRAIN_SLABS_TAB, item);
+
+        return item;
     }
 
     // ITEMS

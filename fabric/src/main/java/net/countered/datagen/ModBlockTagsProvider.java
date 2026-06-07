@@ -2,17 +2,16 @@ package net.countered.datagen;
 
 import net.countered.terrainslabs.block.ModBlockTags;
 import net.countered.terrainslabs.registries.ModBlocksRegistry;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.tags.BlockTags;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
+
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
+public class ModBlockTagsProvider extends FabricTagsProvider.BlockTagsProvider {
 
-    public ModBlockTagsProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-        super(output, registriesFuture);
+    public ModBlockTagsProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookupFuture) {
+        super(output, registryLookupFuture);
     }
 
     @Override
@@ -63,15 +62,15 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
                 .add(ModBlocksRegistry.GRAVEL_SLAB.getKey())
                 .add(ModBlocksRegistry.SAND_SLAB.getKey());
 
-        this.builder(BlockTags.DRY_VEGETATION_MAY_PLACE_ON)
+        this.builder(BlockTags.SUPPORTS_DRY_VEGETATION)
                 .addTag(ModBlockTags.MOD_SAND_SLABS)
                 .addTag(ModBlockTags.TERRACOTTA_SLABS)
                 .addTag(ModBlockTags.DIRT_SLABS)
                 .add(ModBlocksRegistry.FARMLAND_SLAB.getKey());
 
-        this.builder(BlockTags.SNOW_LAYER_CAN_SURVIVE_ON).addTag(BlockTags.SLABS);
+        this.builder(BlockTags.SUPPORT_OVERRIDE_SNOW_LAYER).addTag(BlockTags.SLABS);
 
-        this.builder(BlockTags.SNOW_LAYER_CANNOT_SURVIVE_ON).add(
+        this.builder(BlockTags.CANNOT_SUPPORT_SNOW_LAYER).add(
                 ModBlocksRegistry.ICE_SLAB.getKey(),
                 ModBlocksRegistry.PACKED_ICE_SLAB.getKey()
         );
@@ -292,7 +291,7 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
         this.builder(BlockTags.INFINIBURN_OVERWORLD).add(
                 ModBlocksRegistry.NETHERRACK_SLAB.getKey());
 
-        this.builder(BlockTags.MUSHROOM_GROW_BLOCK).add(
+        this.builder(BlockTags.OVERRIDES_MUSHROOM_LIGHT_REQUIREMENT).add(
                 ModBlocksRegistry.MYCELIUM_SLAB.getKey(),
                 ModBlocksRegistry.PODZOL_SLAB.getKey(),
                 ModBlocksRegistry.CRIMSON_NYLIUM_SLAB.getKey(),
