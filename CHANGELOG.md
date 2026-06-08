@@ -1,5 +1,10 @@
 # Changelog
 
+## [3.1.1]
+
+### Fixed
+- fix log spam
+
 ## [3.1.0]
 ### Added
 Following experimental options have been added to the config:

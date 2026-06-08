@@ -34,7 +34,6 @@ public class MixinDiskFeature {
             CallbackInfoReturnable<Boolean> cir,
             @Local(ordinal = 1) BlockState blockState2
     ) {
-        System.out.println(blockState2);
         Block diskBlock = blockState2.getBlock();
         Block newSlab = ModSlabsMap.getSlabForBlock(diskBlock);
 
