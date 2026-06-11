@@ -16,13 +16,10 @@ import static net.countered.terrainslabs.mixin_applier.EarlyConfigReader.CTS_CON
 @SuppressWarnings("unused")
 public final class TerrainSlabsMixinPlugin implements IMixinConfigPlugin {
     private static final List<String> ONTOP_VEGETATION_MIXIN_CLASSES = List.of(
-            "net.countered.terrainslabs.mixin.ontop.place.MixinBlockBehaviours",
+            "net.countered.terrainslabs.mixin.ontop.place.MixinBlocks",
             "net.countered.terrainslabs.mixin.ontop.render.MixinBlockModelShaper",
-            "net.countered.terrainslabs.mixin.ontop.render.MixinLevelRenderer",
-            "net.countered.terrainslabs.mixin.ontop.state.MixinBlock",
             "net.countered.terrainslabs.mixin.ontop.state.MixinBlockState",
-            "net.countered.terrainslabs.mixin.ontop.state.MixinBlockStateBase",
-            MixinDirector.MODS_MIXIN_NAME
+            "net.countered.terrainslabs.mixin.ontop.state.MixinBlockStateBase"
     );
 
     /**
@@ -47,12 +44,9 @@ public final class TerrainSlabsMixinPlugin implements IMixinConfigPlugin {
     }
 
     @Override
-    public List<String> getMixins() {
-        return MixinDirector.getAndDefine();
-    }
-
-    @Override
     public void onLoad( String s ) {}
+    @Override
+    public List<String> getMixins() {return null;}
     @Override
     public String getRefMapperConfig() {return null;}
     @Override

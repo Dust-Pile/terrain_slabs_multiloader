@@ -2,7 +2,6 @@ package net.countered.terrainslabs.mixin.offset.state;
 
 import net.countered.terrainslabs.api.IExcludedFromOffset;
 import net.countered.terrainslabs.block.OffsetProperty;
-import net.countered.terrainslabs.mixin_applier.ClassCacheAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.GameMasterBlock;
@@ -34,7 +33,6 @@ public abstract class MixinStateDefinition {
         }
 
         propertiesByName.put( "offset", OffsetProperty.ONTOP );
-        ClassCacheAccess.addToCache( owner.getClass().getName() );
         return propertiesByName;
     }
 
@@ -47,14 +45,6 @@ public abstract class MixinStateDefinition {
     @Unique
     private static List<Class<?>> terrain_slabs$excludedClasses = new ArrayList<>( List.of(
             GameMasterBlock.class, EntityBlock.class, IExcludedFromOffset.class
-//            LiquidBlock.class, NoteBlock.class, EntityBlock.class, // Maybe not this one...
-//            BaseRailBlock.class, PistonHeadBlock.class, PistonBaseBlock.class,
-//            RedStoneWireBlock.class, BarrierBlock.class, LightBlock.class,
-//            CarpetBlock.class, WallBannerBlock.class, SlabBlock.class,
-//            EndGatewayBlock.class, GameMasterBlock.class, StructureVoidBlock.class,
-//            AirBlock.class, WallBlock.class, BasePressurePlateBlock.class,
-//            CrossCollisionBlock.class, FenceGateBlock.class, StairBlock.class,
-//            WallSignBlock.class, ButtonBlock.class, WallTorchBlock.class, RedstoneWallTorchBlock.class
     ) );
 
     @Unique

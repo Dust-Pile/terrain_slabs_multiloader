@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * Class used to hold methods for near identical mixins to prevent mix-ups.
  */
-public class MixinHelper {
+public class OffsetHelper {
 
 
     //===============//
@@ -29,7 +29,7 @@ public class MixinHelper {
             BlockState state, LevelReader level, BlockPos pos
     ) {
         BlockState stateAtOffset = original.call( instance, offPos );
-        if ( skipModify( offPos, state, pos ) || ISlabCopy.notBottomSlab( stateAtOffset ) ) {
+        if ( skipModifyOntop( offPos, state, pos ) || ISlabCopy.notBottomSlab( stateAtOffset ) ) {
             return stateAtOffset;
         }
 
@@ -43,7 +43,7 @@ public class MixinHelper {
         boolean origOutput = original.call( instance, offsetPos, direction );
         if (
                 direction != Direction.UP
-                        || skipModify( offsetPos, state, pos )
+                        || skipModifyOntop( offsetPos, state, pos )
                         || ISlabCopy.notBottomSlab( level.getBlockState( offsetPos ) )
         ) {
             return origOutput;
@@ -70,14 +70,14 @@ public class MixinHelper {
     //================//
 
 
-    private static boolean skipModify( BlockPos offPos, BlockState targetState, BlockPos pos ) {
-        return !shouldAllowOffsetState( targetState ) || !((IOffsetState) targetState).terrain_slabs$hasOffsetState()
+    private static boolean skipModifyOntop(BlockPos offPos, BlockState targetState, BlockPos pos ) {
+        return !shouldAllowOntopState( targetState ) || !((IOffsetState) targetState).terrain_slabs$hasOffsetState()
                 || !( offPos.getX() == pos.getX() && offPos.getZ() == pos.getZ() && offPos.getY() == pos.getY() - 1 );
     }
 
-    private static boolean shouldAllowOffsetState( BlockState state ) {
+    private static boolean shouldAllowOntopState(BlockState state ) {
         Block block = state.getBlock();
-        if ( isDefaultOffset( block ) ) {
+        if ( isDefaultOntop( block ) ) {
             return !PlatformConfigHooks.excludeOnTop( block );
         }
 
@@ -86,11 +86,13 @@ public class MixinHelper {
 
     // TODO: Way to dynamically add/remove vegetation classes... (Maybe)
     // hint: someClass.isInstance(someObj)
-    private static boolean isDefaultOffset( Block block ) {
-        if ( block instanceof BushBlock) {
+    private static boolean isDefaultOntop(Block block ) {
+        if ( block instanceof BushBlock || block instanceof CactusBlock || block instanceof SugarCaneBlock ) {
             return PlatformConfigHooks.isVegetationOnSlabsEnabled();
 
-        } else if ( block instanceof TorchBlock || block instanceof LanternBlock) {
+        } else if ( block instanceof TorchBlock || block instanceof LanternBlock || block instanceof CandleBlock
+                || block instanceof BaseFireBlock
+        ) {
             return true;
 
         } else if ( block instanceof SnowLayerBlock ) {

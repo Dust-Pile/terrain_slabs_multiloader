@@ -40,10 +40,6 @@ subprojects {
             name = "Terraformers"
             url = "https://maven.terraformersmc.com/"
         }
-        maven {
-            name = "Jitpack"
-            url = "https://jitpack.io/"
-        }
         maven { url "https://api.modrinth.com/maven" }
     }
 

@@ -15,7 +15,7 @@ public interface IOffsetState {
             return false;
         }
 
-        if ( state.getBlock() instanceof IConditionalOffset conditional && !conditional.couldPlaceOnTop( level, pos, state ) ) {
+        if ( state.getBlock() instanceof IConditionalOffset conditional && !conditional.terrain_slabs$couldPlaceOnTop( level, pos, state ) ) {
             return false;
         }
 

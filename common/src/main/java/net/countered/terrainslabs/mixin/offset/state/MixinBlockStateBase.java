@@ -31,18 +31,18 @@ public class MixinBlockStateBase {
     /**
      * Offset state on update as a final step
      */
-    @Inject( method = "updateShape", at = @At("TAIL") )
-    private void terrain_slabs$updateOffset(
-            Direction direction, BlockState neighborState, LevelAccessor level,
-            BlockPos pos, BlockPos neighborPos,
-            CallbackInfoReturnable<BlockState> cir
-    ) {
-        if ( direction != Direction.DOWN && direction != Direction.UP ) {
-            return;
-        }
-
-        terrain_slabs$checkAndSwitch( level, pos );
-    }
+//    @Inject( method = "updateShape", at = @At("TAIL") )
+//    private void terrain_slabs$updateOffset(
+//            Direction direction, BlockState neighborState, LevelAccessor level,
+//            BlockPos pos, BlockPos neighborPos,
+//            CallbackInfoReturnable<BlockState> cir
+//    ) {
+//        if ( direction != Direction.DOWN && direction != Direction.UP ) {
+//            return;
+//        }
+//
+//        terrain_slabs$checkAndSwitch( level, pos );
+//    }
 
     @Inject( method = "onPlace", at = @At("TAIL") )
     private void terrain_slabs$updateOffsetOnPlace(

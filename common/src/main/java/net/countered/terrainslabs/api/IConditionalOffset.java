@@ -10,6 +10,6 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public interface IConditionalOffset {
 
-    <L extends LevelHeightAccessor> boolean couldPlaceOnTop( L level, BlockPos pos, BlockState state );
+    <L extends LevelHeightAccessor> boolean terrain_slabs$couldPlaceOnTop(L level, BlockPos pos, BlockState state );
 
 }

@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.piston.PistonHeadBlock;
 import org.spongepowered.asm.mixin.Mixin;
 
 /**
- * Simplifies checks for whether to exclude blocks from offset states
+ * Simplifies checks for whether to exclude blocks from offset states by giving them a common interface
  */
 @Mixin( targets = {
         "net.minecraft.world.level.block.ChorusPlantBlock",
