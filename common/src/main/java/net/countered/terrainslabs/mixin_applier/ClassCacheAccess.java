@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 // TODO: Add method (or new class) to check if a given class is available
 public class ClassCacheAccess {
@@ -35,13 +34,17 @@ public class ClassCacheAccess {
 
     public static boolean addToCache( String clazz ) {
         String[] elements = clazz.split( "\\." );
-        if ( elements.length < 2 || elements[1].equals( "minecraft" ) ) {
-            // Exclude minecraft classes. Only things with no refmap should be added dynamically
+        if ( cacheContains( clazz ) || newClasses.contains( clazz ) ) {
             return false;
         }
+        ASMTools.LOGGER.info( clazz );
 
-        TerrainSlabsMixinPlugin.LOGGER.info( clazz );
-        if ( !cacheContains( clazz ) && newClasses.add( clazz ) ) {
+//        if ( elements.length < 2 || elements[1].equals( "minecraft" ) ) {
+//            // Exclude minecraft classes. Only things with no refmap should be added dynamically
+//            return false;
+//        }
+
+        if ( newClasses.add( clazz ) ) {
             hasNewClasses = true;
             return true;
         }
@@ -56,7 +59,7 @@ public class ClassCacheAccess {
         try {
             return gson.fromJson( Files.newBufferedReader( CACHE_PATH ), ClassNameCache.class );
         } catch ( Exception e ) {
-            Logger.getAnonymousLogger().info( "Countered's Terrain Slabs unable to read class cache: {}" + e );
+            ASMTools.LOGGER.warn( "Countered's Terrain Slabs unable to read class cache: {}", e.toString() );
             writeClasses( List.of() );
 
             return new ClassNameCache();
@@ -81,7 +84,7 @@ public class ClassCacheAccess {
             Files.write( CACHE_PATH, gson.toJson( new ClassNameCache( classNames ) ).getBytes() );
             return true;
         } catch ( Exception e ) {
-            TerrainSlabsMixinPlugin.LOGGER.error( "Failed to write file for cache: {}", e.toString() );
+            ASMTools.LOGGER.error( "Failed to write file for cache: {}", e.toString() );
             return false;
         }
     }

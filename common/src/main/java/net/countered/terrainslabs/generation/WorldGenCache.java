@@ -1,10 +1,12 @@
 package net.countered.terrainslabs.generation;
 
 import net.countered.terrainslabs.TerrainSlabs;
+import net.minecraft.client.particle.TerrainParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -80,7 +82,7 @@ public class WorldGenCache {
 //        } );
 //
 //        chunksToRemove.forEach( this::removeChunk ); //; trimmed to size {}, CACHE.size()
-        TerrainSlabs.LOGGER.warn( "Placed Slab Cache grew to size {}.", warningSize );
+        LoggerFactory.getLogger( TerrainSlabs.MOD_ID ).warn( "Placed Slab Cache grew to size {}.", warningSize );
         warningSize = Math.max( (int) ( CACHE.size() * GROWTH_FACTOR ), INITIAL_WARNING_SIZE );
     }
 

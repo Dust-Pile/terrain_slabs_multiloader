@@ -14,7 +14,7 @@ dependencies {
     modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
 
     // Class Grapher
-    // modImplementation include ("io.github.classgraph:classgraph:4.8.184")
+    // modImplementation "io.github.classgraph:classgraph:4.8.184"
 
     // ASM Access lib
     // modImplementation include ("com.github.PlanetTeamSpeakk:Fabric-ASM:2.2")

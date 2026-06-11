@@ -2,8 +2,6 @@ package net.countered.terrainslabs.mixin_applier;
 
 import dev.architectury.platform.Platform;
 import org.objectweb.asm.tree.ClassNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
@@ -17,7 +15,6 @@ import static net.countered.terrainslabs.mixin_applier.EarlyConfigReader.CTS_CON
  */
 @SuppressWarnings("unused")
 public final class TerrainSlabsMixinPlugin implements IMixinConfigPlugin {
-    static final Logger LOGGER = LoggerFactory.getLogger( "terrain_slabs_asm" );
     private static final List<String> ONTOP_VEGETATION_MIXIN_CLASSES = List.of(
             "net.countered.terrainslabs.mixin.ontop.place.MixinBlockBehaviours",
             "net.countered.terrainslabs.mixin.ontop.render.MixinBlockModelShaper",
@@ -25,11 +22,8 @@ public final class TerrainSlabsMixinPlugin implements IMixinConfigPlugin {
             "net.countered.terrainslabs.mixin.ontop.state.MixinBlock",
             "net.countered.terrainslabs.mixin.ontop.state.MixinBlockState",
             "net.countered.terrainslabs.mixin.ontop.state.MixinBlockStateBase",
-            MixinDirector.DYNAMIC_MIXIN_NAME
+            MixinDirector.MODS_MIXIN_NAME
     );
-
-    @Override
-    public void onLoad( String s ) {}
 
     /**
      * Disables vegetation mixins on load instead of during play.
@@ -52,17 +46,22 @@ public final class TerrainSlabsMixinPlugin implements IMixinConfigPlugin {
         return true;
     }
 
+    @Override
     public List<String> getMixins() {
-        if ( ClassCacheAccess.isCacheEmpty() ) {
-            return null;
-        }
-        MixinDirector.INSTANCE.define( MixinDirector.DYNAMIC_MIXIN_NAME );
-        return List.of( MixinDirector.DYNAMIC_MIXIN_NAME_SHORT );
+        return MixinDirector.getAndDefine();
     }
 
+    @Override
+    public void onLoad( String s ) {}
+    @Override
     public String getRefMapperConfig() {return null;}
+    @Override
     public void acceptTargets(Set<String> set, Set<String> set1) {}
-    public void preApply(String s, ClassNode classNode, String s1, IMixinInfo iMixinInfo) {}
+    @Override
+    public void preApply(String s, ClassNode classNode, String s1, IMixinInfo iMixinInfo) {
+
+    }
+    @Override
     public void postApply(String s, ClassNode classNode, String s1, IMixinInfo iMixinInfo) {}
 }
 

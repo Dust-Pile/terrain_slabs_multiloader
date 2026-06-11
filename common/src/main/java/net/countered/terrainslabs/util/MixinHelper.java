@@ -2,6 +2,7 @@ package net.countered.terrainslabs.util;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.countered.platform.PlatformConfigHooks;
+import net.countered.terrainslabs.block.interfaces.IOffsetState;
 import net.countered.terrainslabs.block.interfaces.ISlabCopy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,16 +18,18 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public class MixinHelper {
 
+
     //===============//
     // Proxy Methods //
     //===============//
+
 
     public static BlockState terrain_slabs$convertBlockState(
             LevelReader instance, BlockPos offPos, Operation<BlockState> original,
             BlockState state, LevelReader level, BlockPos pos
     ) {
         BlockState stateAtOffset = original.call( instance, offPos );
-        if ( terrain_slabs$skipModify( offPos, state, pos ) || ISlabCopy.notBottomSlab( stateAtOffset ) ) {
+        if ( skipModify( offPos, state, pos ) || ISlabCopy.notBottomSlab( stateAtOffset ) ) {
             return stateAtOffset;
         }
 
@@ -40,7 +43,7 @@ public class MixinHelper {
         boolean origOutput = original.call( instance, offsetPos, direction );
         if (
                 direction != Direction.UP
-                        || terrain_slabs$skipModify( offsetPos, state, pos )
+                        || skipModify( offsetPos, state, pos )
                         || ISlabCopy.notBottomSlab( level.getBlockState( offsetPos ) )
         ) {
             return origOutput;
@@ -61,18 +64,20 @@ public class MixinHelper {
                 z, xSpeed, ySpeed, zSpeed );
     }
 
+
     //================//
     // Helper Methods //
     //================//
 
-    private static boolean terrain_slabs$skipModify(BlockPos offPos, BlockState targetState, BlockPos pos ) {
-        return !shouldAllowOffsetState( targetState )
+
+    private static boolean skipModify( BlockPos offPos, BlockState targetState, BlockPos pos ) {
+        return !shouldAllowOffsetState( targetState ) || !((IOffsetState) targetState).terrain_slabs$hasOffsetState()
                 || !( offPos.getX() == pos.getX() && offPos.getZ() == pos.getZ() && offPos.getY() == pos.getY() - 1 );
     }
 
-    private static boolean shouldAllowOffsetState(BlockState state ) {
+    private static boolean shouldAllowOffsetState( BlockState state ) {
         Block block = state.getBlock();
-        if ( terrain_slabs$isDefaultOffset( block ) ) {
+        if ( isDefaultOffset( block ) ) {
             return !PlatformConfigHooks.excludeOnTop( block );
         }
 
@@ -81,17 +86,16 @@ public class MixinHelper {
 
     // TODO: Way to dynamically add/remove vegetation classes... (Maybe)
     // hint: someClass.isInstance(someObj)
-    private static boolean terrain_slabs$isDefaultOffset( Block block ) {
+    private static boolean isDefaultOffset( Block block ) {
         if ( block instanceof BushBlock) {
             return PlatformConfigHooks.isVegetationOnSlabsEnabled();
 
         } else if ( block instanceof TorchBlock || block instanceof LanternBlock) {
-            return !(block instanceof WallTorchBlock) && !(block instanceof RedstoneWallTorchBlock);
+            return true;
 
         } else if ( block instanceof SnowLayerBlock ) {
             return PlatformConfigHooks.isSnowOnSlabsEnabled();
         }
-
         return false;
     }
 }
