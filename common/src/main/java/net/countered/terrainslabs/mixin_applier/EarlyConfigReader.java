@@ -35,12 +35,12 @@ public final class EarlyConfigReader {
 
     public record ConfigFormat(
             boolean enableSlabGeneration, boolean enableVegetationOnSlabs,
-            boolean enableSnowOnSlabs, boolean fluidsDestroyGeneration,
+            boolean enableSnowOnSlabs, boolean fluidsDestroyGeneration, boolean fireBlocksOffset,
             float adjustSlabAo, List<String> ontopIncludeBlocks, List<String> ontopExcludeBlocks
     ) {
         public ConfigFormat() {
             this(
-                    true, true, true, true, 0.5f,
+                    true, true, true, true, false, 0.5f,
                     new ArrayList<>(), new ArrayList<>()
             );
         }

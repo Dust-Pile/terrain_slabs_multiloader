@@ -8,19 +8,37 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin( BaseFireBlock.class )
 public class MixinBaseFireBlock implements IConditionalOffset {
 
+    @Shadow
+    @Final
+    protected static VoxelShape DOWN_AABB = Block.box(0.0F, 0.0F, 0.0F, 16.0F, 1.0F, 16.0F);
+
+    /**
+     * Check if fire is supported from below. otherwise no offset
+     */
     @Override
     @Unique
     public <L extends LevelHeightAccessor> boolean terrain_slabs$couldPlaceOnTop(L level, BlockPos pos, BlockState state) {
-        return state.is( Blocks.SOUL_FIRE ) || terrain_slabs$isBottomSupportedFire( (BlockGetter) level, pos, state );
+        return state.is( Blocks.SOUL_FIRE ) || (
+                ( !state.hasProperty( PipeBlock.NORTH ) || !state.getValue(PipeBlock.NORTH) )
+                && ( !state.hasProperty( PipeBlock.EAST ) || !state.getValue(PipeBlock.EAST) )
+                && ( !state.hasProperty( PipeBlock.SOUTH ) || !state.getValue(PipeBlock.SOUTH) )
+                && ( !state.hasProperty( PipeBlock.WEST ) || !state.getValue(PipeBlock.WEST) )
+                && ( !state.hasProperty( PipeBlock.UP ) || !state.getValue(PipeBlock.UP) )
+        );
     }
 
     /**
@@ -40,9 +58,5 @@ public class MixinBaseFireBlock implements IConditionalOffset {
         }
 
         return ISlabCopy.getOriginState( stateAtOffset );
-    }
-
-    private static boolean terrain_slabs$isBottomSupportedFire( BlockGetter level, BlockPos pos, BlockState state ) {
-        return false;
     }
 }

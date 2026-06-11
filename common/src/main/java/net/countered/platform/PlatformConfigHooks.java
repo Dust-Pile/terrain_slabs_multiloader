@@ -26,6 +26,9 @@ public class PlatformConfigHooks {
     }
 
     @ExpectPlatform
+    public static boolean canFireBlocksOffset() { throw new AssertionError(); }
+
+    @ExpectPlatform
     public static float getAoStrength() {
         throw new AssertionError();
     }

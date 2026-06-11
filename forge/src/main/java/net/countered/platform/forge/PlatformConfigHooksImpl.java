@@ -42,6 +42,13 @@ public class PlatformConfigHooksImpl extends MidnightConfig {
         return fluidsDestroyGeneration;
     }
 
+    @Entry(category = GENERATION)
+    public static boolean fireBlocksOffset = false;
+
+    public static boolean canFireBlocksOffset() {
+        return fireBlocksOffset;
+    }
+
     @Entry(category = RENDERING, isSlider = true, min = 0, max = 1f)
     public static float adjustSlabAo = 0.5f;
 

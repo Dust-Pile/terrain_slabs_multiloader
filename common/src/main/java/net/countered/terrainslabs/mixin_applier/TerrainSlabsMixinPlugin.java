@@ -36,6 +36,8 @@ public final class TerrainSlabsMixinPlugin implements IMixinConfigPlugin {
             return CTS_CONFIGS.enableSnowOnSlabs();
         } else if ( mixinClassName.equals("net.countered.terrainslabs.mixin.terrain.MixinFlowingFluid") ) {
             return CTS_CONFIGS.fluidsDestroyGeneration() && Platform.getOptionalMod("fluidlogged").isEmpty();
+        } else if ( mixinClassName.matches( "net.countered.terrainslabs.mixin.offset.block_tweaks.MixinBaseFireBlock" ) ) {
+            return CTS_CONFIGS.fireBlocksOffset();
         } else if ( mixinClassName.matches( "net.countered.terrainslabs.mixin.offset.block_tweaks.*" ) ) {
             return CTS_CONFIGS.enableVegetationOnSlabs();
         }
