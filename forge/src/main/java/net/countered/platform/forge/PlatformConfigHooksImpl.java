@@ -72,11 +72,35 @@ public class PlatformConfigHooksImpl extends MidnightConfig {
     public static List<ResourceLocation> ontopExcludeBlocks = Lists.newArrayList();
 
     private static BlockChecker getOntopExcludeBlocksHash;
-    public static boolean excludeOnTop( Block b ) {
+    public static boolean excludeOntop(Block b ) {
         if ( getOntopExcludeBlocksHash == null ) {
             getOntopExcludeBlocksHash = new BlockChecker( ontopExcludeBlocks );
         }
 
         return getOntopExcludeBlocksHash.contains( b );
+    }
+
+    @Entry( category = PLACEMENT )
+    public static List<ResourceLocation> onbottomIncludeBlocks = Lists.newArrayList();
+
+    private static BlockChecker onbottomIncludeBlocksHash;
+    public static boolean includeOnbottom( Block b ) {
+        if ( onbottomIncludeBlocksHash == null ) {
+            onbottomIncludeBlocksHash = new BlockChecker( onbottomIncludeBlocks );
+        }
+
+        return onbottomIncludeBlocksHash.contains( b );
+    }
+
+    @Entry( category = PLACEMENT )
+    public static List<ResourceLocation> onbottomExcludeBlocks = Lists.newArrayList();
+
+    private static BlockChecker getOnbottomExcludeBlocksHash;
+    public static boolean excludeOnbottom( Block b ) {
+        if ( getOnbottomExcludeBlocksHash == null ) {
+            getOnbottomExcludeBlocksHash = new BlockChecker( onbottomExcludeBlocks );
+        }
+
+        return getOnbottomExcludeBlocksHash.contains( b );
     }
 }

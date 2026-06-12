@@ -55,7 +55,7 @@ public class MixinBlockStateBase {
     @Unique
     private void terrain_slabs$checkAndSwitch( LevelAccessor level, BlockPos pos ) {
         IOffsetState newState = (IOffsetState) level.getBlockState( pos );
-        if ( IOffsetState.shouldBeOnTopState( level, pos, (BlockState) newState ) != newState.terrain_slabs$isOffset() ) {
+        if ( IOffsetState.shouldBeOntopState( level, pos, (BlockState) newState ) != newState.terrain_slabs$isOffsetAbove() ) {
             level.setBlock( pos, newState.terrain_slabs$getOppositeState(), Block.UPDATE_ALL );
         }
     }
@@ -71,7 +71,7 @@ public class MixinBlockStateBase {
      */
     @Inject(method = "getOffset", at = @At("RETURN"), cancellable = true)
     private void terrain_slabs$getOffset(BlockGetter level, BlockPos pos, CallbackInfoReturnable<Vec3> cir) {
-        if ( !((IOffsetState) this ).terrain_slabs$isOffset() ) return;
+        if ( !((IOffsetState) this ).terrain_slabs$isOffsetAbove() ) return;
 
         Vec3 currentOffset = cir.getReturnValue();
         cir.setReturnValue(new Vec3(currentOffset.x, -0.5, currentOffset.z));
@@ -85,7 +85,7 @@ public class MixinBlockStateBase {
             at = @At("RETURN"),
             cancellable = true)
     private void terrain_slabs$smartShapeOffset(BlockGetter level, BlockPos pos, CollisionContext context, CallbackInfoReturnable<VoxelShape> cir) {
-        if ( !((IOffsetState) this ).terrain_slabs$isOffset() ) return;
+        if ( !((IOffsetState) this ).terrain_slabs$isOffsetAbove() ) return;
 
         Vec3 offset = ( (BlockState) (Object) this ).getOffset(level, pos);
         // TODO: Make this more robust for XYZ offset type

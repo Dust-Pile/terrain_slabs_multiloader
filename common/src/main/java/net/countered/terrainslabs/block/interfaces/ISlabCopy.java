@@ -16,12 +16,17 @@ public interface ISlabCopy {
     }
 
     static boolean notBottomSlab(BlockState state) {
-        return !( state.getBlock() instanceof ISlabCopy)
-                || state.getValue( SlabBlock.TYPE ) != SlabType.BOTTOM;
+        return !( state.getBlock() instanceof ISlabCopy) || state.getValue( SlabBlock.TYPE ) != SlabType.BOTTOM;
+    }
+    static boolean notTopSlab(BlockState state) {
+        return !( state.getBlock() instanceof ISlabCopy) || state.getValue( SlabBlock.TYPE ) != SlabType.TOP;
     }
 
     static boolean isBottomSlab(BlockState state) {
         return state.getBlock() instanceof ISlabCopy && state.getValue( SlabBlock.TYPE ) == SlabType.BOTTOM;
+    }
+    static boolean isTopSlab(BlockState state) {
+        return state.getBlock() instanceof ISlabCopy && state.getValue( SlabBlock.TYPE ) == SlabType.TOP;
     }
 
     default boolean matches( ISlabCopy slab ) {

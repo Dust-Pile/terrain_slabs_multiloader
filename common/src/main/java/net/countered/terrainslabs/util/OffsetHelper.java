@@ -1,7 +1,6 @@
 package net.countered.terrainslabs.util;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import net.countered.platform.PlatformConfigHooks;
 import net.countered.terrainslabs.block.interfaces.IOffsetState;
 import net.countered.terrainslabs.block.interfaces.ISlabCopy;
 import net.minecraft.core.BlockPos;
@@ -10,7 +9,6 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -29,7 +27,9 @@ public class OffsetHelper {
             BlockState state, LevelReader level, BlockPos pos
     ) {
         BlockState stateAtOffset = original.call( instance, offPos );
-        if ( skipModifyOntop( offPos, state, pos ) || ISlabCopy.notBottomSlab( stateAtOffset ) ) {
+        if ( skipModifyOntop( offPos, state, stateAtOffset, pos )
+                && skipModifyOnbottom( offPos, state, stateAtOffset, pos )
+        ) {
             return stateAtOffset;
         }
 
@@ -41,15 +41,10 @@ public class OffsetHelper {
             BlockState state, LevelReader level, BlockPos pos
     ) {
         boolean origOutput = original.call( instance, offsetPos, direction );
-        if (
-                direction != Direction.UP
-                        || skipModifyOntop( offsetPos, state, pos )
-                        || ISlabCopy.notBottomSlab( level.getBlockState( offsetPos ) )
-        ) {
-            return origOutput;
-        }
+        BlockState offsetState = level.getBlockState( offsetPos );
 
-        return true;
+        return origOutput || ( direction == Direction.UP && !skipModifyOntop( offsetPos, state, offsetState, pos ) )
+                || ( direction == Direction.DOWN && !skipModifyOnbottom( offsetPos, state, offsetState, pos ) );
     }
 
     public static void terrain_slabs$offsetParticles(
@@ -70,34 +65,17 @@ public class OffsetHelper {
     //================//
 
 
-    private static boolean skipModifyOntop(BlockPos offPos, BlockState targetState, BlockPos pos ) {
-        return !shouldAllowOntopState( targetState ) || !((IOffsetState) targetState).terrain_slabs$hasOffsetState()
-                || !( offPos.getX() == pos.getX() && offPos.getZ() == pos.getZ() && offPos.getY() == pos.getY() - 1 );
+    private static boolean skipModifyOntop( BlockPos offPos, BlockState targetState, BlockState stateAtOffset, BlockPos pos ) {
+        return ISlabCopy.notBottomSlab( stateAtOffset )
+                || !((IOffsetState) targetState).terrain_slabs$hasOntopState()
+                || !( offPos.getX() == pos.getX() && offPos.getZ() == pos.getZ() && offPos.getY() == pos.getY() - 1 )
+                || !IOffsetState.shouldAllowOntopState( targetState );
     }
 
-    private static boolean shouldAllowOntopState(BlockState state ) {
-        Block block = state.getBlock();
-        if ( isDefaultOntop( block ) ) {
-            return !PlatformConfigHooks.excludeOnTop( block );
-        }
-
-        return PlatformConfigHooks.includeOntop( block );
-    }
-
-    // TODO: Way to dynamically add/remove vegetation classes... (Maybe)
-    // hint: someClass.isInstance(someObj)
-    private static boolean isDefaultOntop(Block block ) {
-        if ( block instanceof BushBlock || block instanceof CactusBlock || block instanceof SugarCaneBlock ) {
-            return PlatformConfigHooks.isVegetationOnSlabsEnabled();
-
-        } else if ( block instanceof TorchBlock || block instanceof LanternBlock || block instanceof CandleBlock
-                || block instanceof BaseFireBlock
-        ) {
-            return true;
-
-        } else if ( block instanceof SnowLayerBlock ) {
-            return PlatformConfigHooks.isSnowOnSlabsEnabled();
-        }
-        return false;
+    private static boolean skipModifyOnbottom( BlockPos offPos, BlockState targetState, BlockState stateAtOffset, BlockPos pos ) {
+        return ISlabCopy.notTopSlab( stateAtOffset )
+                || !((IOffsetState) targetState).terrain_slabs$hasOnbottomState()
+                || !( offPos.getX() == pos.getX() && offPos.getZ() == pos.getZ() && offPos.getY() == pos.getY() + 1 )
+                || !IOffsetState.shouldAllowOnbottomState( targetState );
     }
 }

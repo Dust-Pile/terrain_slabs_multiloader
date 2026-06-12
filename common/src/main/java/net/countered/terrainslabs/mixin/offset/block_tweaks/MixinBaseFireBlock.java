@@ -3,10 +3,10 @@ package net.countered.terrainslabs.mixin.offset.block_tweaks;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.countered.terrainslabs.api.IConditionalOffset;
+import net.countered.terrainslabs.block.interfaces.IOffsetState;
 import net.countered.terrainslabs.block.interfaces.ISlabCopy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -16,7 +16,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin( BaseFireBlock.class )
@@ -30,8 +29,7 @@ public class MixinBaseFireBlock implements IConditionalOffset {
      * Check if fire is supported from below. otherwise no offset
      */
     @Override
-    @Unique
-    public <L extends LevelHeightAccessor> boolean terrain_slabs$couldPlaceOnTop(L level, BlockPos pos, BlockState state) {
+    public <L extends BlockGetter> boolean terrain_slabs$couldPlaceOntop(L level, BlockPos pos, BlockState state) {
         return state.is( Blocks.SOUL_FIRE ) || (
                 ( !state.hasProperty( PipeBlock.NORTH ) || !state.getValue(PipeBlock.NORTH) )
                 && ( !state.hasProperty( PipeBlock.EAST ) || !state.getValue(PipeBlock.EAST) )
@@ -41,10 +39,14 @@ public class MixinBaseFireBlock implements IConditionalOffset {
         );
     }
 
+    @Override
+    public <L extends BlockGetter> boolean terrain_slabs$couldPlaceOnbottom(L level, BlockPos pos, BlockState state) {
+        return false;
+    }
+
     /**
      * When calling for the state below a block, pretends it's the matching full block when relevant.
      */
-    // TODO: make config for disabling fire offset
     @WrapOperation( method = "getState", at = @At( value = "INVOKE",
             target = "Lnet/minecraft/world/level/BlockGetter;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"
     ) )
@@ -58,5 +60,18 @@ public class MixinBaseFireBlock implements IConditionalOffset {
         }
 
         return ISlabCopy.getOriginState( stateAtOffset );
+    }
+
+    @WrapOperation( method = "getState", at = {
+            @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;defaultBlockState()Lnet/minecraft/world/level/block/state/BlockState;"),
+            @At( value = "INVOKE", target = "Lnet/minecraft/world/level/block/FireBlock;getStateForPlacement(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;" )
+    } )
+    private static BlockState terrain_slabs$offsetState(
+            Block instance, Operation<BlockState> original,
+            BlockGetter reader, BlockPos pos
+    ) {
+        BlockState originState = original.call( instance );
+        return IOffsetState.shouldBeOntopState( reader, pos, originState )
+                ? ((IOffsetState) originState).terrain_slabs$getOntopState() : originState;
     }
 }

@@ -83,8 +83,8 @@ final public class OffsetFeature {
 
     // TODO: Rename and handle onbottom states
     private static boolean placeOntopState( LevelAccessor level, BlockPos pos, BlockState state ) {
-        if ( IOffsetState.shouldBeOnTopState( level, pos, state ) ) {
-            state = ((IOffsetState) state ).terrain_slabs$getOffsetState();
+        if ( IOffsetState.shouldBeOntopState( level, pos, state ) ) {
+            state = ((IOffsetState) state ).terrain_slabs$getOntopState();
             return level.setBlock( pos, state, Block.UPDATE_CLIENTS );
         }
 

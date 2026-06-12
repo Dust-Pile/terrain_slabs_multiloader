@@ -1,7 +1,7 @@
 package net.countered.terrainslabs.api;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -10,6 +10,8 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public interface IConditionalOffset {
 
-    <L extends LevelHeightAccessor> boolean terrain_slabs$couldPlaceOnTop(L level, BlockPos pos, BlockState state );
+    <L extends BlockGetter> boolean terrain_slabs$couldPlaceOntop(L level, BlockPos pos, BlockState state );
+
+    <L extends BlockGetter> boolean terrain_slabs$couldPlaceOnbottom( L level, BlockPos pos, BlockState state );
 
 }

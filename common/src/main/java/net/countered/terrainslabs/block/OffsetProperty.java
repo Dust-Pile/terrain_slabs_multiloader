@@ -8,10 +8,15 @@ public class OffsetProperty {
 
     public static final EnumProperty<OffsetType> ONTOP = EnumProperty.create(
             "offset", OffsetType.class, OffsetType.NONE, OffsetType.ONTOP );
+    public static final EnumProperty<OffsetType> ONBOTTOM = EnumProperty.create(
+            "offset", OffsetType.class, OffsetType.NONE, OffsetType.ONBOTTOM );
+    public static final EnumProperty<OffsetType> ALL = EnumProperty.create(
+            "offset", OffsetType.class );
 
     public enum OffsetType implements StringRepresentable {
         NONE("none"),
-        ONTOP("ontop");
+        ONTOP("ontop"),
+        ONBOTTOM("onbottom");
 
         private final String name;
         OffsetType( String name ) {

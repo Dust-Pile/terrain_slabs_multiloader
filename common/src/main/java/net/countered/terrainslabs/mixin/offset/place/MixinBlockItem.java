@@ -21,8 +21,8 @@ public class MixinBlockItem {
             return null;
         }
 
-        if ( IOffsetState.shouldBeOnTopState( context.getLevel(), context.getClickedPos(), state ) ) {
-            return ((IOffsetState) state ).terrain_slabs$getOffsetState();
+        if ( IOffsetState.shouldBeOntopState( context.getLevel(), context.getClickedPos(), state ) ) {
+            return ((IOffsetState) state ).terrain_slabs$getOntopState();
         }
 
         return state;

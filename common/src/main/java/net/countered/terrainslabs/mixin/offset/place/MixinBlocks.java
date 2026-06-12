@@ -33,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.At;
         "net.minecraft.world.level.block.CandleCakeBlock",
         "net.minecraft.world.level.block.SeaPickleBlock",
         "net.minecraft.world.level.block.CakeBlock",
-        "net.minecraft.world.level.block.FireBlock",//
+        "net.minecraft.world.level.block.FireBlock",
         "net.minecraft.world.level.block.SoulFireBlock",
         "net.minecraft.world.level.block.BaseFireBlock",
         "net.minecraft.world.level.block.CactusBlock",

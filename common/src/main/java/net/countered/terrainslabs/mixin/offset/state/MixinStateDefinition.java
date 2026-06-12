@@ -21,7 +21,7 @@ import java.util.function.Function;
 public abstract class MixinStateDefinition {
 
     /**
-     * All blocks are baked with offset states, we will check whether to use them later.
+     * Many blocks are baked with offset states, we will check whether to use them later.
      */
     @ModifyVariable( method = "<init>", at = @At("HEAD"), argsOnly = true )
     private static <O, S> Map<String, Property<?>> terrain_slabs$addOffsetProperty(
