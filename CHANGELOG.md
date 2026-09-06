@@ -2,12 +2,19 @@
 
 ## [4.0.4-beta]
 
-Repair outdated config files on game load.
+Various cleanup and fixes.
+
+### Added
+- Regenerate invalid configs
+- Reorganize / simplify slab classes, add API classes
+- ITillable API interface (currently unused)
 
 ### Fixed
 - Update to fixed Poly Mixin version for Fabric 1.20.1 (less unstable)
 - Fix floating torches (or others using support shape methods)
 - Fix invalid config file crash
+
+***
 
 ## [4.0.3-beta]
 
