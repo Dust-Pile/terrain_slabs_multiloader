@@ -32,23 +32,24 @@ public class OffsetBlocks {
 
     public static boolean isApiIncludedOntop(Block block) {
         return (!isApiExcludedOntop(block)) && apiIncludeOntopCheck != null ? apiIncludeOntopCheck.contains(block)
-                : API_INCLUDED_ONTOP_BLOCKS.contains(BlockChecker.safeGetDescriptionId(block));
+                : API_INCLUDED_ONTOP_BLOCKS.contains(BlockChecker.safeGetId(block));
     }
 
     public static boolean isApiExcludedOntop(Block block) {
         return apiExcludeOntopCheck != null ? apiExcludeOntopCheck.contains(block)
-                : API_EXCLUDED_ONTOP_BLOCKS.contains(BlockChecker.safeGetDescriptionId(block));
+                : API_EXCLUDED_ONTOP_BLOCKS.contains(BlockChecker.safeGetId(block));
     }
 
     public static boolean isApiIncludedOnbottom(Block block) {
         return (!isApiExcludedOnbottom(block)) && apiIncludeOnbottomCheck != null ? apiIncludeOnbottomCheck.contains(block)
-                : API_INCLUDED_ONBOTTOM_BLOCKS.contains(BlockChecker.safeGetDescriptionId(block));
+                : API_INCLUDED_ONBOTTOM_BLOCKS.contains(BlockChecker.safeGetId(block));
     }
 
     public static boolean isApiExcludedOnbottom(Block block) {
         return apiExcludeOnbottomCheck != null ? apiExcludeOnbottomCheck.contains(block)
-                : API_EXCLUDED_ONBOTTOM_BLOCKS.contains(BlockChecker.safeGetDescriptionId(block));
+                : API_EXCLUDED_ONBOTTOM_BLOCKS.contains(BlockChecker.safeGetId(block));
     }
+
 
 
     //====================//

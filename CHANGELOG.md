@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.1.2-beta]
+
+### Fixed
+- Grass appearing in waterlogged slabs
+
 ## [4.1.1-beta]
 
 ### Fixed
