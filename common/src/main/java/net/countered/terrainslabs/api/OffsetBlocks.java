@@ -6,6 +6,9 @@ import net.minecraft.world.level.block.Block;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: Test capability and best practice for loading on time (this needs to load very early to work)
+// TODO: Attempt some kind of "per namespace" lock to provide better load order handling (would that work with fabric?)
+@SuppressWarnings("unused")
 public class OffsetBlocks {
 
     //Does not combine with config. Config takes precedent.
